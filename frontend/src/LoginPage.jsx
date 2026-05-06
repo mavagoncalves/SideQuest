@@ -1,127 +1,87 @@
-import React from "react";
-import { Mail, Lock } from "lucide-react";
+import { GraduationCap, Lock, Mail } from "lucide-react";
 
 function LoginPage() {
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-slate-900 text-white">
-      {/* Left Side */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-16 bg-slate-800">
-        <h1 className="text-5xl font-bold mb-6">Welcome Back</h1>
-
-        <p className="text-slate-300 text-lg max-w-md">
-          Login to continue using your dashboard and manage your projects.
-        </p>
-
-        <div className="mt-10 bg-slate-700 rounded-2xl p-6 w-[350px]">
-          <h2 className="text-2xl font-semibold mb-4">
-            Dashboard Preview
-          </h2>
-
-          <div className="space-y-3">
-            <div className="h-3 bg-cyan-400 rounded w-3/4"></div>
-            <div className="h-3 bg-violet-400 rounded w-1/2"></div>
-            <div className="h-3 bg-cyan-400 rounded w-2/3"></div>
+    <main className="min-h-screen bg-[#fff7f4] text-slate-900">
+      <header className="border-b border-orange-200 bg-white">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 text-white">
+              <GraduationCap size={22} />
+            </div>
+            <span className="text-2xl font-bold text-orange-600">
+              SideQuest
+            </span>
           </div>
+
+          <button className="rounded-lg bg-orange-500 px-4 py-2 font-semibold text-white">
+            I'm a Student
+          </button>
         </div>
-      </div>
+      </header>
 
+      <section className="bg-gradient-to-r from-orange-500 via-pink-500 to-pink-600 px-6 py-10 text-center text-white">
+        <h1 className="text-4xl font-bold">Welcome Back</h1>
+        <p className="mx-auto mt-3 max-w-lg">
+          Login to continue finding student collaborators and projects.
+        </p>
+      </section>
 
-      {/* Right Side */}
-      <div className="flex flex-1 items-center justify-center p-6">
-        <div className="w-full max-w-md bg-slate-800 p-8 rounded-2xl shadow-lg">
-          <h2 className="text-3xl font-bold mb-2">Login</h2>
-
-          <p className="text-slate-400 mb-8">
+      <section className="mx-auto max-w-md px-6 py-10">
+        <form className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-bold">Login</h2>
+          <p className="mt-1 text-sm text-slate-500">
             Enter your account details below.
           </p>
 
-  <div className="mb-5">
-            <label className="block mb-2 text-sm">
-              Email
-            </label>
-
-            <div className="flex items-center bg-slate-700 rounded-xl px-4 py-3">
-              <Mail size={18} className="text-slate-400 mr-3" />
-
-              <input
-                type="email"
-                placeholder="you@example.com"
-                className="bg-transparent outline-none w-full"
-              />
-            </div>
+          <label className="mt-6 block text-sm font-semibold">Email</label>
+          <div className="mt-2 flex items-center gap-3 rounded-lg border border-orange-200 px-3 py-3">
+            <Mail size={18} className="text-orange-500" />
+            <input
+              className="w-full outline-none"
+              type="email"
+              placeholder="you@example.com"
+            />
           </div>
 
-          {/* Password */}
-          <div className="mb-5">
-            <label className="block mb-2 text-sm">
-              Password
-            </label>
-
-            <div className="flex items-center bg-slate-700 rounded-xl px-4 py-3">
-              <Lock size={18} className="text-slate-400 mr-3" />
-
-              <input
-                type="password"
-                placeholder="********"
-                className="bg-transparent outline-none w-full"
-              />
-            </div>
+          <label className="mt-4 block text-sm font-semibold">Password</label>
+          <div className="mt-2 flex items-center gap-3 rounded-lg border border-orange-200 px-3 py-3">
+            <Lock size={18} className="text-orange-500" />
+            <input
+              className="w-full outline-none"
+              type="password"
+              placeholder="Enter password"
+            />
           </div>
 
-          {/* Remember + Forgot */}
-          <div className="flex justify-between items-center text-sm mb-6">
-            <label className="flex items-center gap-2 text-slate-400">
+          <div className="mt-4 flex items-center justify-between text-sm">
+            <label className="flex items-center gap-2 text-slate-600">
               <input type="checkbox" />
               Remember me
             </label>
 
-            <button className="text-cyan-400 hover:underline">
+            <button className="font-semibold text-pink-600" type="button">
               Forgot password?
             </button>
           </div>
 
-          {/* Button */}
-          <button className="w-full bg-cyan-500 hover:bg-cyan-600 transition rounded-xl py-3 font-semibold">
+          <button
+            className="mt-6 w-full rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 py-3 font-bold text-white"
+            type="submit"
+          >
             Login
           </button>
 
-
-          {/* Divider */}
-          <div className="flex items-center my-6">
-            <div className="flex-1 h-px bg-slate-600"></div>
-
-            <span className="px-3 text-slate-400 text-sm">
-              or
-            </span>
-
-            <div className="flex-1 h-px bg-slate-600"></div>
-          </div>
-
-
-          {/* Social Buttons */}
-          <div className="grid grid-cols-2 gap-4">
-            <button className="bg-slate-700 hover:bg-slate-600 rounded-xl py-3">
-              Google
-            </button>
-
-            <button className="bg-slate-700 hover:bg-slate-600 rounded-xl py-3">
-              GitHub
-            </button>
-          </div>
-
-
-          {/* Signup */}
-          <p className="text-center text-slate-400 mt-6">
-            Don’t have an account?{" "}
-            <span className="text-cyan-400 cursor-pointer hover:underline">
+          <p className="mt-5 text-center text-sm text-slate-600">
+            Don't have an account?{" "}
+            <button className="font-bold text-orange-600" type="button">
               Sign up
-            </span>
+            </button>
           </p>
-
-        </div>
-      </div>
-    </div>
+        </form>
+      </section>
+    </main>
   );
 }
 
-export default LoginPage
+export default LoginPage;
