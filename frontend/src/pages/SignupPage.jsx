@@ -1,4 +1,5 @@
 import { GraduationCap } from "lucide-react"
+import React from "react"
 
 function SignupPage() {
   return (
@@ -30,7 +31,56 @@ function SignupPage() {
           Fill in your details below.
         </p>
 
-        
+        <form className="mt-6 grid gap-3">
+          <label className="text-sm font-bold" htmlFor="name">
+            Full name
+          </label>
+          <input
+            className="w-full rounded-lg border border-orange-200 bg-orange-50/40 p-3 outline-orange-400"
+            id="name"
+            type="text"
+            placeholder="Your name"
+          />
+
+          <label className="text-sm font-bold" htmlFor="email">
+            Email
+          </label>
+          <input
+            className="w-full rounded-lg border border-orange-200 bg-orange-50/40 p-3 outline-orange-400"
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+          />
+
+          <label className="text-sm font-bold" htmlFor="password">
+            Password
+          </label>
+          <input
+            className="w-full rounded-lg border border-orange-200 bg-orange-50/40 p-3 outline-orange-400"
+            id="password"
+            type="password"
+            placeholder="Choose a password"
+          />
+
+          <label className="text-sm font-bold" htmlFor="role">
+            I am a
+          </label>
+          <select
+            className="w-full rounded-lg border border-orange-200 bg-orange-50/40 p-3 outline-orange-400"
+            id="role"
+          >
+            <option>Student</option>
+            <option>Client</option>
+          </select>
+
+          <button
+            className="mt-2 rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 p-3 font-extrabold text-white"
+            type="submit"
+          >
+            Create Account
+          </button>
+        </form>
+
         <p className="mt-5 text-center text-sm text-slate-500">
           Already have an account?{" "}
           <a className="font-extrabold text-orange-600 no-underline" href="/login">
