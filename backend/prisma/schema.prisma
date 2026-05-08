@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CLIENT
+  TALENT
+  ADMIN
+}
+
+model User {
+  id              String      @id @default(cuid())
+  email           String      @unique
+  passwordHash    String
+  firstName       String
+  lastName        String
+  role            UserRole    @default(CLIENT)
+  bio             String?     @db.Text
+  location        String?
+  hourlyRateCents Int?
+  avatarUrl       String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  skills          UserSkill[]
+
+  @@index([role])
+  @@index([location])
+}
+
+model Skill {
+  id        String      @id @default(cuid())
+  name      String      @unique
+  createdAt DateTime    @default(now())
+  users     UserSkill[]
+}
+
+model UserSkill {
+  userId    String
+  skillId   String
+  years     Int?
+  createdAt DateTime @default(now())
+  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, skillId])
+}
