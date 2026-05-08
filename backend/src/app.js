@@ -1,9 +1,9 @@
-import cors from "cors";
-import express from "express";
-import morgan from "morgan";
-import { prisma } from "./prisma";
+const cors = require("cors");
+const express = require("express");
+const morgan = require("morgan");
+const { prisma } = require("./prisma");
 
-export const app = express();
+const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -71,14 +71,9 @@ app.post("/users", async (req, res, next) => {
   }
 });
 
-app.use(
-  (
-    error: unknown,
-    _req: express.Request,
-    res: express.Response,
-    _next: express.NextFunction
-  ) => {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-);
+app.use((error, _req, res, _next) => {
+  console.error(error);
+  res.status(500).json({ error: "Internal server error" });
+});
+
+module.exports = { app };
