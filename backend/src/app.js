@@ -1,7 +1,7 @@
 const cors = require("cors");
 const express = require("express");
 const morgan = require("morgan");
-const { prisma } = require("./prisma");
+const { prisma } = require("../prisma/prisma");
 
 const app = express();
 
