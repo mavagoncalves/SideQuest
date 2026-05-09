@@ -6,8 +6,15 @@
 
 body {
   margin: 0;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  background: #fff7f4;
 }
 
 #root {
   min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
 }

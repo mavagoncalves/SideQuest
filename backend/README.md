@@ -1,6 +1,6 @@
 # SideQuest Backend
 
-Express + Prisma backend for SideQuest.
+Express + Prisma backend for SideQuest, written in JavaScript.
 
 ## Setup
 
@@ -23,6 +23,8 @@ Express + Prisma backend for SideQuest.
    ```env
    DATABASE_URL="mysql://sidequest_user:sidequest_password@localhost:3306/sidequest"
    ```
+
+   If port `3306` is already used on your laptop, use the port where your local MariaDB is running instead.
 
 4. Generate the Prisma client:
 
