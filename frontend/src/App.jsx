@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import AdminPage from './pages/AdminPage'
 import CreateServicePage from './pages/CreateServicePage'
 import LoginPage from './pages/LoginPage'
+import ProfilePage from './pages/ProfilePage'
 
 const App =() =>{
 
@@ -14,13 +15,27 @@ const App =() =>{
       <Routes>
         <Route path='/' element={<HomePage/>}/> 
         <Route path='/login' element={<LoginPage/>}/>
-        <Route path='/admin' element={<AdminPage/>}/>
         <Route path='/service/create' element={<CreateServicePage/>}/>
 
-        
+        {/* Only logged in users can access these */}
+        <Route 
+          path='/admin'
+          element={
+            <ProtectedRoute>
+              <AdminPage/>
+            </ProtectedRoute>
+          }
+        />
 
+        <Route 
+          path='/profile'
+          element={
+            <ProtectedRoute>
+              <ProfilePage/>
+            </ProtectedRoute>
+          }
+        />
 
-        
       </Routes>
     </div>
   )
