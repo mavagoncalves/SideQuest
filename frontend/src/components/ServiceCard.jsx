@@ -1,17 +1,19 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
-const ServiceCard = () => {
+const ServiceCard = ({ id, title }) => {
   return (
     <div className="border border-gray-200 rounded-xl p-4">
       {/* a visual placeholder, can insert image or icon */}
       <div className="w-full h-40 bg-gray-100 rounded-lg mb-3" />
+      <h3 className="font-bold">{title || "Title of the service"}</h3>
       
-      {/* Service information */}
-      <div className="h-5 w-3/4 bg-gray-200 rounded mb-2" /> {/* Title */}
-      <div className="h-4 w-1/2 bg-gray-100 rounded mb-4" /> {/* price and user */}
-
-      {/* View detail hint */}
-      <div className="text-orange-600 text-sm font-bold hover:bg-gray-100 transition-shadow cursor-pointer">View Details →</div>
+      <Link 
+        to={`/service/${id}`} 
+        className="inline-block mt-4 text-orange-600 font-bold hover:underline"
+      >
+        View Details →
+      </Link>
     </div>
   )
 }

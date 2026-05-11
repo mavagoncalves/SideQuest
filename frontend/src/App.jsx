@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import AdminPage from './pages/AdminPage'
 import CreateServicePage from './pages/CreateServicePage'
 import LoginPage from './pages/LoginPage'
+import ServiceDetail from './pages/ServiceDetail'
 
 const App =() =>{
 
@@ -15,6 +16,7 @@ const App =() =>{
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='/admin' element={<AdminPage/>}/>
         <Route path='/service/create' element={<CreateServicePage/>}/>
+        <Route path="/service/:id" element={<ServiceDetail />} />
         
       </Routes>
     </div>
