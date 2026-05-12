@@ -1,7 +1,8 @@
-const cors = require("cors");
-const express = require("express");
-const morgan = require("morgan");
-const { prisma } = require("../prisma/prisma");
+import cors from "cors";
+import express from "express";
+import morgan from "morgan";
+import { prisma } from "../prisma/prisma.js";
+import profileRoutes from "./routes/profile.routes.js";
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use(morgan("dev"));
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", service: "sidequest-api" });
 });
+
+app.use("/profiles", profileRoutes);
 
 app.get("/users", async (_req, res, next) => {
   try {
@@ -76,4 +79,4 @@ app.use((error, _req, res, _next) => {
   res.status(500).json({ error: "Internal server error" });
 });
 
-module.exports = { app };
+export { app };
