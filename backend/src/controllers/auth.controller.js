@@ -1,32 +1,61 @@
-import {registerUser, loginUser} from '../services/auth.service.js'
+import { registerUser, loginUser } from '../services/auth.service.js';
+import { signToken } from '../utils/jwt.js';
 
+export const register = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-export const register = async (req, res)=>{
-    try{
-        const {email,password} = req.body;
-        const user = await registerUser(email,password);
+        // Basic validation
+        if (!email || !password) {
+            return res.status(400).json({ error: "Email and password are required" });
+        }
 
+        // Let service handle creating the user and hashing the password
+        const user = await registerUser(email, password);
+
+        // Let the helper generate the JWT
+        const token = signToken(user.id);
+
+        // Send success response to frontend
         res.status(201).json({
-            message: 'User created',
-            user: {id: user.id, email: user.email}
+            token,
+            user: { 
+                id: user.id, 
+                email: user.email 
+            }
         });
-    } catch (error){
-        res.status(400).json({error: error.message})
+
+    } catch (error) {
+        console.error("Register Error:", error);
+        res.status(400).json({ error: "Could not create account. Email might already be in use." });
     }
 };
 
-export const login = async(req,res)=>{
-    try{
-        const {email,password} = req.body;
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-        const user = await loginUser(email,password);
+        if (!email || !password) {
+            return res.status(400).json({ error: "Email and password are required" });
+        }
 
-        //temporal hasta el jwt
+        // Let the service handle finding the user and checking the hash
+        const user = await loginUser(email, password);
+
+        // Let the helper generate the JWT
+        const token = signToken(user.id);
+
+        // Send success response to frontend
         res.json({
-            message: 'Login succesful',
-            user: {id: user.id, email: user.email}
+            token,
+            user: { 
+                id: user.id, 
+                email: user.email 
+            }
         });
+
     } catch (error) {
-        res.status(401).json({error: error.message});
+        console.error("Login Error:", error);
+        res.status(401).json({ error: "Invalid email or password" });
     }
 };
