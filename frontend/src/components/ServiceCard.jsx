@@ -5,7 +5,11 @@ const ServiceCard = ({ id, title }) => {
   return (
     <div className="border border-gray-200 rounded-xl p-4">
       {/* a visual placeholder, can insert image or icon */}
-      <div className="w-full h-40 bg-gray-100 rounded-lg mb-3" />
+      <div className="w-full h-40 bg-gray-100 rounded-lg mb-3 flex items-center justify-center text-gray-400" > 
+        <div className="text-center">
+          <p>Image</p>
+        </div>
+      </div>
       <h3 className="font-bold">{title || "Title of the service"}</h3>
       
       <Link 
