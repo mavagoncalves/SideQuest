@@ -3,6 +3,9 @@ import { GraduationCap, Lock, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/axiosClient";
 
+import Footer from "../components/Footer.jsx";
+import Navbar from "../components/Navbar.jsx"
+
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -43,6 +46,8 @@ function LoginPage() {
 
   return (
     <main className="min-h-screen bg-[#fff7f4] text-slate-900">
+
+    <Navbar></Navbar>
 
       <section className="bg-gradient-to-r from-orange-500 via-pink-500 to-pink-600 px-6 py-10 text-center text-white">
         <h1 className="text-4xl font-bold">Welcome Back</h1>
@@ -129,6 +134,9 @@ function LoginPage() {
           </p>
         </form>
       </section>
+
+    <Footer></Footer>
+
     </main>
   );
 }

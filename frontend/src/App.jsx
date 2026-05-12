@@ -7,6 +7,7 @@ import AdminPage from './pages/AdminPage'
 import CreateServicePage from './pages/CreateServicePage'
 import LoginPage from './pages/LoginPage'
 import ProfilePage from './pages/ProfilePage'
+import SignupPage from './pages/SignupPage'
 
 const App =() =>{
 
@@ -16,6 +17,7 @@ const App =() =>{
         <Route path='/' element={<HomePage/>}/> 
         <Route path='/login' element={<LoginPage/>}/>
         <Route path='/service/create' element={<CreateServicePage/>}/>
+        <Route path='/signup' element={<SignupPage/>}/>
 
         {/* Only logged in users can access these */}
         <Route 
