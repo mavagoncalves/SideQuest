@@ -2,6 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const morgan = require("morgan");
 const { prisma } = require("../prisma/prisma");
+const profileRoutes = require("./routes/profile.routes");
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use(morgan("dev"));
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", service: "sidequest-api" });
 });
+
+app.use("/profiles", profileRoutes);
 
 app.get("/users", async (_req, res, next) => {
   try {
