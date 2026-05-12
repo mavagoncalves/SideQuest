@@ -44,6 +44,25 @@ const validateProfileData = (data) => {
   return null;
 };
 
+const handleProfileError = (error, res, next) => {
+  if (error.code === "P2002" && error.meta?.target?.includes("userId")) {
+    res.status(409).json({ error: "Profile already exists for this user" });
+    return;
+  }
+
+  if (error.code === "P2003") {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+
+  if (error.code === "P2025") {
+    res.status(404).json({ error: "Profile not found" });
+    return;
+  }
+
+  next(error);
+};
+
 const listProfiles = async (_req, res, next) => {
   try {
     const profiles = await getAllProfiles();
@@ -102,7 +121,7 @@ const createUserProfile = async (req, res, next) => {
     const profile = await createProfile(userId, profileData);
     res.status(201).json(profile);
   } catch (error) {
-    next(error);
+    handleProfileError(error, res, next);
   }
 };
 
@@ -119,7 +138,7 @@ const updateUserProfile = async (req, res, next) => {
     const profile = await updateProfile(req.params.id, profileData);
     res.json(profile);
   } catch (error) {
-    next(error);
+    handleProfileError(error, res, next);
   }
 };
 
