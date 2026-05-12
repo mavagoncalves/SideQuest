@@ -43,22 +43,6 @@ function LoginPage() {
 
   return (
     <main className="min-h-screen bg-[#fff7f4] text-slate-900">
-      <header className="border-b border-orange-200 bg-white">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 text-white">
-              <GraduationCap size={22} />
-            </div>
-            <span className="text-2xl font-bold text-orange-600">
-              SideQuest
-            </span>
-          </div>
-
-          <button className="rounded-lg bg-orange-500 px-4 py-2 font-semibold text-white">
-            I'm a Student
-          </button>
-        </div>
-      </header>
 
       <section className="bg-gradient-to-r from-orange-500 via-pink-500 to-pink-600 px-6 py-10 text-center text-white">
         <h1 className="text-4xl font-bold">Welcome Back</h1>
