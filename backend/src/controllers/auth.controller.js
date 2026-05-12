@@ -19,11 +19,10 @@ export const login = async(req,res)=>{
     try{
         const {email,password} = req.body;
 
-        const user = await loginUser(email,password);
+        const {user, token} = await loginUser(email,password);
 
-        //temporal hasta el jwt
         res.json({
-            message: 'Login succesful',
+            token,
             user: {id: user.id, email: user.email}
         });
     } catch (error) {
