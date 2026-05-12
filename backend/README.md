@@ -49,6 +49,11 @@ Express + Prisma backend for SideQuest, written in JavaScript.
 - `GET /health` checks that the server is running.
 - `GET /users` lists users with their skills.
 - `POST /users` creates a user.
+- `GET /profiles` lists user profiles with skill tags.
+- `GET /profiles/:id` fetches one profile.
+- `GET /profiles/user/:userId` fetches a profile by user.
+- `POST /profiles` creates a profile.
+- `PUT /profiles/:id` updates a profile.
 
 Required `POST /users` JSON fields:
 
@@ -58,5 +63,28 @@ Required `POST /users` JSON fields:
   "passwordHash": "replace-with-real-hash",
   "firstName": "Ava",
   "lastName": "Smith"
+}
+```
+
+Example `POST /profiles` JSON:
+
+```json
+{
+  "userId": "user-id",
+  "headline": "Frontend developer",
+  "bio": "I build accessible React apps.",
+  "location": "Stockholm",
+  "hourlyRateCents": 35000,
+  "availability": "Weekends",
+  "skillTags": ["React", "CSS", "UI Design"]
+}
+```
+
+Example `PUT /profiles/:id` JSON:
+
+```json
+{
+  "headline": "Full-stack developer",
+  "skillTags": ["React", "Node.js", "Prisma"]
 }
 ```
