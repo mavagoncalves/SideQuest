@@ -1,8 +1,8 @@
-const cors = require("cors");
-const express = require("express");
-const morgan = require("morgan");
-const { prisma } = require("../prisma/prisma");
-const profileRoutes = require("./routes/profile.routes");
+import cors from "cors";
+import express from "express";
+import morgan from "morgan";
+import { prisma } from "../prisma/prisma.js";
+import profileRoutes from "./routes/profile.routes.js";
 
 const app = express();
 
@@ -79,4 +79,4 @@ app.use((error, _req, res, _next) => {
   res.status(500).json({ error: "Internal server error" });
 });
 
-module.exports = { app };
+export { app };

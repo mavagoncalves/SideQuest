@@ -1,11 +1,11 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   createUserProfile,
   fetchProfileById,
   fetchProfileByUserId,
   listProfiles,
   updateUserProfile
-} = require("../controllers/profile.controller");
+} from "../controllers/profile.controller.js";
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.get("/:id", fetchProfileById);
 router.post("/", createUserProfile);
 router.put("/:id", updateUserProfile);
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const { prisma } = require("../../prisma/prisma");
+import { prisma } from "../../prisma/prisma.js";
 
 const profileInclude = {
   user: {
@@ -35,7 +35,7 @@ const normalizeProfile = (profile) => ({
   skillTags: profile.skillTags.map(({ skillTag }) => skillTag)
 });
 
-const getAllProfiles = async () => {
+export const getAllProfiles = async () => {
   const profiles = await prisma.profile.findMany({
     orderBy: { updatedAt: "desc" },
     include: profileInclude
@@ -44,7 +44,7 @@ const getAllProfiles = async () => {
   return profiles.map(normalizeProfile);
 };
 
-const getProfileById = async (id) => {
+export const getProfileById = async (id) => {
   const profile = await prisma.profile.findUnique({
     where: { id },
     include: profileInclude
@@ -53,7 +53,7 @@ const getProfileById = async (id) => {
   return profile ? normalizeProfile(profile) : null;
 };
 
-const getProfileByUserId = async (userId) => {
+export const getProfileByUserId = async (userId) => {
   const profile = await prisma.profile.findUnique({
     where: { userId },
     include: profileInclude
@@ -62,7 +62,7 @@ const getProfileByUserId = async (userId) => {
   return profile ? normalizeProfile(profile) : null;
 };
 
-const createProfile = async (userId, profileData) => {
+export const createProfile = async (userId, profileData) => {
   const { skillTags, ...data } = profileData;
 
   const profile = await prisma.profile.create({
@@ -81,7 +81,7 @@ const createProfile = async (userId, profileData) => {
   return normalizeProfile(profile);
 };
 
-const updateProfile = async (id, profileData) => {
+export const updateProfile = async (id, profileData) => {
   const { skillTags, ...data } = profileData;
 
   const profile = await prisma.$transaction(async (tx) => {
@@ -108,12 +108,4 @@ const updateProfile = async (id, profileData) => {
   });
 
   return normalizeProfile(profile);
-};
-
-module.exports = {
-  createProfile,
-  getAllProfiles,
-  getProfileById,
-  getProfileByUserId,
-  updateProfile
 };

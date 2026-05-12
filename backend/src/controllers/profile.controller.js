@@ -1,10 +1,10 @@
-const {
+import {
   createProfile,
   getAllProfiles,
   getProfileById,
   getProfileByUserId,
   updateProfile
-} = require("../models/profile.model");
+} from "../models/profile.model.js";
 
 const allowedProfileFields = [
   "headline",
@@ -63,7 +63,7 @@ const handleProfileError = (error, res, next) => {
   next(error);
 };
 
-const listProfiles = async (_req, res, next) => {
+export const listProfiles = async (_req, res, next) => {
   try {
     const profiles = await getAllProfiles();
     res.json(profiles);
@@ -72,7 +72,7 @@ const listProfiles = async (_req, res, next) => {
   }
 };
 
-const fetchProfileById = async (req, res, next) => {
+export const fetchProfileById = async (req, res, next) => {
   try {
     const profile = await getProfileById(req.params.id);
 
@@ -87,7 +87,7 @@ const fetchProfileById = async (req, res, next) => {
   }
 };
 
-const fetchProfileByUserId = async (req, res, next) => {
+export const fetchProfileByUserId = async (req, res, next) => {
   try {
     const profile = await getProfileByUserId(req.params.userId);
 
@@ -102,7 +102,7 @@ const fetchProfileByUserId = async (req, res, next) => {
   }
 };
 
-const createUserProfile = async (req, res, next) => {
+export const createUserProfile = async (req, res, next) => {
   try {
     const { userId } = req.body;
     const profileData = pickProfileData(req.body);
@@ -125,7 +125,7 @@ const createUserProfile = async (req, res, next) => {
   }
 };
 
-const updateUserProfile = async (req, res, next) => {
+export const updateUserProfile = async (req, res, next) => {
   try {
     const profileData = pickProfileData(req.body);
     const validationError = validateProfileData(profileData);
@@ -140,12 +140,4 @@ const updateUserProfile = async (req, res, next) => {
   } catch (error) {
     handleProfileError(error, res, next);
   }
-};
-
-module.exports = {
-  createUserProfile,
-  fetchProfileById,
-  fetchProfileByUserId,
-  listProfiles,
-  updateUserProfile
 };
