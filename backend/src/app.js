@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import { prisma } from "../prisma/prisma.js";
+import authRoutes from "./routes/auth.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
 
 const app = express();
@@ -15,6 +16,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/profiles", profileRoutes);
+app.use("/auth", authRoutes);
 
 app.get("/users", async (_req, res, next) => {
   try {
