@@ -1,17 +1,14 @@
 import { GraduationCap } from "lucide-react"
 import React from "react"
 
+import Footer from "../components/Footer.jsx";
+import Navbar from "../components/Navbar.jsx"
+
 function SignupPage() {
   return (
     <main className="min-h-screen bg-[#fff7f4] font-sans text-slate-900">
-      <header className="mx-auto flex max-w-4xl items-center gap-3 px-6 py-6">
-        <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 font-extrabold text-white">
-          <GraduationCap size={24} />
-        </div>
-        <h1 className="m-0 text-3xl font-extrabold text-orange-600">
-          SideQuest
-        </h1>
-      </header>
+      
+      <Navbar></Navbar>
 
       <section className="bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-10 text-center text-white">
         <p className="mx-auto mb-4 w-fit rounded-full border border-white/60 px-4 py-1.5 text-sm font-bold">
@@ -88,6 +85,9 @@ function SignupPage() {
           </a>
         </p>
       </section>
+
+    <Footer></Footer>
+
     </main>
   )
 }
