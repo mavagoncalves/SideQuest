@@ -55,9 +55,9 @@ export const getMarketPlaceUserById = async(req , res)=>{
     }
 };
 
-//GET USERS BY SKILL THROUGH FILTER
+//GET USERS BY FILTER SEARCH (skill, location, name)
 export const getMarketPlaceUsers = async (req ,res)=>{
-    const {skill,location} = req.qeury;
+    const {skill,location,name} = req.qeury;
 
     try{
         const{skill} = req.query;
@@ -79,6 +79,22 @@ export const getMarketPlaceUsers = async (req ,res)=>{
                         contains : location,
                         mode: 'insensitive' //no difference between upper/lower case
                     }
+                }),
+                ...getMarketPlaceUserById(name &&{
+                    OR : [
+                        {
+                            firstName: {
+                                contains : name,
+                                mode : 'insensitive'
+                            }
+                        },
+                        {
+                            lastName : {
+                                contains : name,
+                                mode: 'insensitive'
+                            }
+                        }
+                    ]
                 })
             },
             include : {
