@@ -54,3 +54,39 @@ export const getMarketPlaceUserById = async(req , res)=>{
         res.status(500).json({error: 'INTERNAL_SERVER_ERROR'});
     }
 };
+
+//GET USERS BY SKILL THROUGH FILTER
+export const getMarketPlaceUsers = async (req ,res)=>{
+    try{
+        const{skill} = req.query;
+
+        const users = await prisma.user.findMany({
+            where : {
+                role : 'TALENT',
+                ...(skill && {
+                    skills : {
+                        some : {
+                            skill: {
+                                name: skill
+                            }
+                        }
+                    }
+                })
+            },
+            include : {
+                skills: {
+                    include : {
+                        skill : true
+                    }
+                }
+            },
+            orderBy : {
+                createdAt : 'desc'
+            }
+        }
+        )
+        res.json(users);
+    }   catch(error){
+        res.status(500).json({error: 'INTERNAL_SERVER_ERROR'})
+    }
+};
