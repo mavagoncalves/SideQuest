@@ -50,20 +50,6 @@ const services = [
     },
 ]
 
-// -----------Not sure about the reviews, but it is possible to add it to the profiles if we decide to do so later on
-/*
-const reviews = [
-  {
-    name: 'Jonas K.',
-    text: 'Maya made our event poster look much more professional and delivered it quickly.',
-  },
-  {
-    name: 'Sara L.',
-    text: 'Easy to communicate with and very good at turning a rough idea into a clean design.',
-  },
-]
-  */
-
 const PublicProfile = () => {
     return (
         <div className="flex min-h-screen flex-col bg-[#fff7f4] text-slate-900">
@@ -107,13 +93,13 @@ const PublicProfile = () => {
                             <p className="mt-1 text-3xl font-extrabold">{student.startingPrice}</p>
                             <button className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 font-extrabold text-orange-600">
                                 <MessageCircle size={19} />
-                                Send Quest Request
+                                Send SideQuest Request
                             </button>
                         </div>
                     </div>
                 </section>
 
-                <section>
+                <section className="mx-auto grid max-w-6xl gap-6 px-6 py-8 lg:grid-cols-[2fr_1fr]">
                     <div className="space-y-6">
                         <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
                             <h2 className="text-2xl font-bold">About</h2>
@@ -155,7 +141,51 @@ const PublicProfile = () => {
                         </div>
                     </div>
 
+
+                    {/** PROFILE INFO AND SIDEQUEST REQUEST */}
+                    <aside className="space-y-6">
+                        <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
+                            <h2 className="text-xl font-bold">Profile Info</h2>
+
+                            <div className="mt-5 space-y-4 text-sm">
+                                <div className="flex items-center gap-3">
+                                    <Star className="text-orange-500" size={18} />
+                                    <span>
+                                        <strong>{student.rating}</strong> rating from clients
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <BriefcaseBusiness className="text-orange-500" size={18} />
+                                    <span>
+                                        <strong>{student.completedQuests}</strong> completed quests
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Clock className="text-orange-500" size={18} />
+                                    <span>{student.responseTime}</span>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Mail className="text-orange-500" size={18} />
+                                    <span>Contact through SideQuest</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
+                            <h2 className="text-xl font-bold">SideQuest Request</h2>
+                            <p className="mt-3 text-sm leading-6 text-slate-600">
+                                Send a custom request with your project details, deadline, and budget. The
+                                student can accept or decline it.
+                            </p>
+                            <button className="mt-5 w-full rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 py-3 font-extrabold text-white">
+                                Send SideQuest request
+                            </button>
+                        </div>
+                    </aside>
+
+
                 </section>
+
 
 
 
@@ -164,7 +194,7 @@ const PublicProfile = () => {
             </main>
 
             <Footer />
-        </div>)
+        </div >)
 }
 
 export default PublicProfile
