@@ -64,9 +64,7 @@ const PublicProfile = () => {
                             </div>
 
                             <div>
-                                <p className="mb-2 w-fit rounded-full border border-white/60 px-4 py-1 text-sm font-bold">
-                                    Available for quest requests
-                                </p>
+                               
                                 <h1 className="text-4xl font-extrabold">{student.name}</h1>
                                 <p className="mt-2 text-lg font-semibold text-white/95">{student.title}</p>
                                 <div className="mt-3 flex flex-wrap gap-4 text-sm text-white/90">
@@ -99,7 +97,7 @@ const PublicProfile = () => {
                         <p className="mt-3 leading-7 text-slate-600">{student.bio}</p>
                     </div>
 
-                    <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
+                    <div className="mt-6 grid items-start gap-6 lg:grid-cols-[2fr_1fr]">
                         <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
                             <h2 className="text-2xl font-bold">Services</h2>
                             <div className="mt-5 grid gap-4">
@@ -166,6 +164,11 @@ const PublicProfile = () => {
                                 </div>
                             </div>
 
+                            {/**
+                             * Added this part even if it is a repetition because if there are a lot of services in the services card,
+                             * then the services card will stretch in size. Maybe the right side would look too empty in that case.
+                             * We can delete this div later if that is not the case.
+                             */}
                             <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
                                 <h2 className="text-xl font-bold">SideQuest Request</h2>
                                 <p className="mt-3 text-sm leading-6 text-slate-600">
@@ -176,6 +179,7 @@ const PublicProfile = () => {
                                     Send SideQuest request
                                 </button>
                             </div>
+
                         </aside>
                     </div>
                 </section>
