@@ -28,6 +28,8 @@ model User {
   updatedAt       DateTime    @updatedAt
   profile         Profile?
   skills          UserSkill[]
+  reviewsGiven    Review[] @relation("ReviewsGiven")
+  reviewsReceived Review[] @relation("ReviewsReceived")
 
   @@index([role])
   @@index([location])
@@ -83,4 +85,20 @@ model UserSkill {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, skillId])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  rating     Int      // e.g., 1 to 5 stars
+  comment    String?  @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Foreign Keys
+  reviewerId String
+  revieweeId String
+
+  // Relations
+  reviewer   User     @relation("ReviewsGiven", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewee   User     @relation("ReviewsReceived", fields: [revieweeId], references: [id], onDelete: Cascade)
 }
