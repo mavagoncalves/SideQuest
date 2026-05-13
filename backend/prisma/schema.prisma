@@ -26,10 +26,45 @@ model User {
   avatarUrl       String?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+  profile         Profile?
   skills          UserSkill[]
 
   @@index([role])
   @@index([location])
+}
+
+model Profile {
+  id              String            @id @default(cuid())
+  userId          String            @unique
+  headline        String?
+  bio             String?           @db.Text
+  location        String?
+  hourlyRateCents Int?
+  avatarUrl       String?
+  availability    String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillTags       ProfileSkillTag[]
+
+  @@index([location])
+}
+
+model SkillTag {
+  id        String            @id @default(cuid())
+  name      String            @unique
+  createdAt DateTime          @default(now())
+  profiles  ProfileSkillTag[]
+}
+
+model ProfileSkillTag {
+  profileId String
+  skillTagId String
+  createdAt DateTime @default(now())
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skillTag  SkillTag @relation(fields: [skillTagId], references: [id], onDelete: Cascade)
+
+  @@id([profileId, skillTagId])
 }
 
 model Skill {

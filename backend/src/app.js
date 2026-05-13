@@ -1,19 +1,23 @@
-const cors = require("cors");
-const express = require("express");
-const morgan = require("morgan");
-const { prisma } = require("../prisma/prisma");
-const marketplaceRoutes = require ('./routes/marketplace.routes')
+import cors from "cors";
+import express from "express";
+import morgan from "morgan";
+import { prisma } from "../prisma/prisma.js";
+import authRoutes from "./routes/auth.routes.js";
+import profileRoutes from "./routes/profile.routes.js";
+import marketplaceRoutes from './routes/marketplace.routes';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-app.use('/marketplace', marketplaceRoutes);
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", service: "sidequest-api" });
 });
+
+app.use("/profiles", profileRoutes);
+app.use("/auth", authRoutes);
 
 app.get("/users", async (_req, res, next) => {
   try {
@@ -78,4 +82,4 @@ app.use((error, _req, res, _next) => {
   res.status(500).json({ error: "Internal server error" });
 });
 
-module.exports = { app };
+export { app };
