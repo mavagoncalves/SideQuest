@@ -57,11 +57,9 @@ export const getMarketPlaceUserById = async(req , res)=>{
 
 //GET USERS BY FILTER SEARCH (skill, location, name)
 export const getMarketPlaceUsers = async (req ,res)=>{
-    const {skill,location,name} = req.qeury;
+    const {skill,location,name} = req.query;
 
     try{
-        const{skill} = req.query;
-
         const users = await prisma.user.findMany({
             where : {
                 role : 'TALENT',
@@ -74,13 +72,13 @@ export const getMarketPlaceUsers = async (req ,res)=>{
                         }
                     }
                 }),
-                ...getMarketPlaceUserById(location &&{
+                ...(location &&{
                     location : {
                         contains : location,
                         mode: 'insensitive' //no difference between upper/lower case
                     }
                 }),
-                ...getMarketPlaceUserById(name &&{
+                ...(name &&{
                     OR : [
                         {
                             firstName: {
