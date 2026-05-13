@@ -57,17 +57,11 @@ const PublicProfile = () => {
 
             <main className="flex-1">
                 <section className="bg-gradient-to-r from-orange-500 via-pink-500 to-pink-600 px-6 py-10 text-white">
-
-
-
-
                     <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
                         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
                             <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-4 border-white bg-white text-3xl font-black text-orange-600 shadow-sm">
                                 {student.avatar}
                             </div>
-
-
 
                             <div>
                                 <p className="mb-2 w-fit rounded-full border border-white/60 px-4 py-1 text-sm font-bold">
@@ -99,102 +93,97 @@ const PublicProfile = () => {
                     </div>
                 </section>
 
-                <section className="mx-auto grid max-w-6xl gap-6 px-6 py-8 lg:grid-cols-[2fr_1fr]">
-                    <div className="space-y-6">
+                <section className="mx-auto max-w-6xl px-6 py-8">
+                    <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
+                        <h2 className="text-2xl font-bold">About</h2>
+                        <p className="mt-3 leading-7 text-slate-600">{student.bio}</p>
+                    </div>
+
+                    <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
                         <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
-                            <h2 className="text-2xl font-bold">About</h2>
-                            <p className="mt-3 leading-7 text-slate-600">{student.bio}</p>
-                        </div>
-                    </div>
-
-
-                    <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
-                        <h2 className="text-2xl font-bold">Skills</h2>
-                        <div className="mt-4 flex flex-wrap gap-3">
-                            {skills.map((skill) => (
-                                <span className="rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-700" key={skill}>{skill}</span>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
-                        <h2 className="text-2xl font-bold">Services</h2>
-                        <div className="mt-5 grid gap-4">
-                            {services.map((service) => (
-                                <article
-                                    className="rounded-lg border border-orange-100 bg-orange-50/40 p-5"
-                                    key={service.title}
-                                >
-                                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                                        <div>
-                                            <h3 className="text-lg font-bold">{service.title}</h3>
-                                            <p className="mt-2 text-sm leading-6 text-slate-600">
-                                                {service.description}
+                            <h2 className="text-2xl font-bold">Services</h2>
+                            <div className="mt-5 grid gap-4">
+                                {services.map((service) => (
+                                    <article
+                                        className="rounded-lg border border-orange-100 bg-orange-50/40 p-5"
+                                        key={service.title}
+                                    >
+                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                                            <div>
+                                                <h3 className="text-lg font-bold">{service.title}</h3>
+                                                <p className="mt-2 text-sm leading-6 text-slate-600">
+                                                    {service.description}
+                                                </p>
+                                            </div>
+                                            <p className="shrink-0 rounded-full bg-white px-4 py-2 text-sm font-extrabold text-pink-600">
+                                                {service.price}
                                             </p>
                                         </div>
-                                        <p className="shrink-0 rounded-full bg-white px-4 py-2 text-sm font-extrabold text-pink-600">
-                                            {service.price}
-                                        </p>
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-                    </div>
-
-
-                    {/** PROFILE INFO AND SIDEQUEST REQUEST */}
-                    <aside className="space-y-6">
-                        <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
-                            <h2 className="text-xl font-bold">Profile Info</h2>
-
-                            <div className="mt-5 space-y-4 text-sm">
-                                <div className="flex items-center gap-3">
-                                    <Star className="text-orange-500" size={18} />
-                                    <span>
-                                        <strong>{student.rating}</strong> rating from clients
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <BriefcaseBusiness className="text-orange-500" size={18} />
-                                    <span>
-                                        <strong>{student.completedQuests}</strong> completed quests
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Clock className="text-orange-500" size={18} />
-                                    <span>{student.responseTime}</span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Mail className="text-orange-500" size={18} />
-                                    <span>Contact through SideQuest</span>
-                                </div>
+                                    </article>
+                                ))}
                             </div>
                         </div>
 
-                        <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
-                            <h2 className="text-xl font-bold">SideQuest Request</h2>
-                            <p className="mt-3 text-sm leading-6 text-slate-600">
-                                Send a custom request with your project details, deadline, and budget. The
-                                student can accept or decline it.
-                            </p>
-                            <button className="mt-5 w-full rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 py-3 font-extrabold text-white">
-                                Send SideQuest request
-                            </button>
-                        </div>
-                    </aside>
+                        <aside className="space-y-6">
+                            <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
+                                <h2 className="text-xl font-bold">Skills</h2>
+                                <div className="mt-4 flex flex-wrap gap-3">
+                                    {skills.map((skill) => (
+                                        <span
+                                            className="rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-700"
+                                            key={skill}
+                                        >
+                                            {skill}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
 
+                            <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
+                                <h2 className="text-xl font-bold">Profile Info</h2>
 
+                                <div className="mt-5 space-y-4 text-sm">
+                                    <div className="flex items-center gap-3">
+                                        <Star className="text-orange-500" size={18} />
+                                        <span>
+                                            <strong>{student.rating}</strong> rating from clients
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <BriefcaseBusiness className="text-orange-500" size={18} />
+                                        <span>
+                                            <strong>{student.completedQuests}</strong> completed quests
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <Clock className="text-orange-500" size={18} />
+                                        <span>{student.responseTime}</span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <Mail className="text-orange-500" size={18} />
+                                        <span>Contact through SideQuest</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
+                                <h2 className="text-xl font-bold">SideQuest Request</h2>
+                                <p className="mt-3 text-sm leading-6 text-slate-600">
+                                    Send a custom request with your project details, deadline, and budget.
+                                    The student can accept or decline it.
+                                </p>
+                                <button className="mt-5 w-full rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 py-3 font-extrabold text-white">
+                                    Send SideQuest request
+                                </button>
+                            </div>
+                        </aside>
+                    </div>
                 </section>
-
-
-
-
-
-
             </main>
 
             <Footer />
-        </div >)
+        </div>
+    )
 }
 
 export default PublicProfile
