@@ -43,7 +43,7 @@ const HomePage = () => {
 
           {/* SearchBar here */}
           <div className="mb-10 text-center">
-            <h1 className="text-3xl font-black mb-6">Find Providers Services</h1>
+            <h1 className="text-3xl font-black mb-6">Find Service Providers</h1>
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
           </div>
 
