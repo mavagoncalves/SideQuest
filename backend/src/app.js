@@ -4,7 +4,7 @@ import morgan from "morgan";
 import { prisma } from "../prisma/prisma.js";
 import authRoutes from "./routes/auth.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
-import marketplaceRoutes from './routes/marketplace.routes';
+import marketplaceRoutes from './routes/marketplace.routes.js';
 
 const app = express();
 
