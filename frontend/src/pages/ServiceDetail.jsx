@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { User} from 'lucide-react';
+import { User } from 'lucide-react';
 import BackButton from '../components/BackButton';
+import axiosClient from '../api/axiosClient';
 
 const ServiceDetail = () => {
   const { id } = useParams();
+  const [talent, setTalent] = useState(null);
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        // This hits the router.get('/:id', getMarketPlaceUserById)
+        const response = await axiosClient.get(`/marketplace/${id}`);
+        setTalent(response.data);
+      } catch (error) {
+        console.error("Error connecting to marketplace controller", error);
+      }
+    };
+    if (id) fetchDetails();
+  }, [id]);
+
+  if (!talent) return <div className="text-center py-20">Loading...</div>;
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-10">
@@ -26,21 +43,23 @@ const ServiceDetail = () => {
           <div className="mb-6">
             <span className="text-sm font-bold text-orange-600 uppercase">Service Details</span>
             <h1 className="text-4xl font-black text-gray-900 mt-2">
-              Service Title
+              {talent.skills?.[0]?.skill?.name || "Service"}
             </h1>
             
             <div className="flex items-center mt-4 text-2xl font-bold text-gray-900">
-              <span>250 SEK</span>
+              <span>Price on request</span>
             </div>
           </div>
           
           <div className="bg-white p-6 rounded-xl mb-8">
             <h2 className="font-bold text-gray-800 mb-2">Description</h2>
-            <p className="text-gray-600 leading-relaxed">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. A qui beatae itaque aliquid 
-              repudiandae illo possimus molestias corporis eveniet amet autem, iste placeat dolore 
-              non libero praesentium alias dignissimos incidunt.
-            </p>
+            <div className="flex flex-wrap gap-2">
+              {talent.skills?.map((s, i) => (
+                <span key={i} className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">
+                  {s.skill.name}
+                </span>
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center p-4 border border-gray-200 rounded-xl mb-8">
@@ -49,10 +68,10 @@ const ServiceDetail = () => {
             </div>
             <div>
               <Link 
-                to="/profile/placeholder-user-id" 
+                to="{`/profile/${talent.id}`}" 
                 className="font-bold text-gray-900 hover:text-orange-600 transition-colors"
               >
-                Student Name
+                {talent.firstName} {talent.lastName}
               </Link>
             </div>
           </div>
@@ -61,7 +80,7 @@ const ServiceDetail = () => {
             type="button"
             className="w-full bg-gray-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-orange-600 shadow-lg shadow-gray-200"
           >
-            Hire
+            Hire {talent.firstName}
           </button>
         </div>
 
