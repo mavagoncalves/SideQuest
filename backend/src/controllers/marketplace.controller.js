@@ -2,14 +2,51 @@ import {prisma} from '../../prisma/prisma.js'
 
 
 //GET ALL ACCOUNTS = TALENT (user accounts with role 'TALENT'= students seeking job)
-// + optional filters (applied to skill, name/surname, location)
+// + optional filters (applied to skill, name/surname, location) + 'term'
 export const getMarketPlaceUsers = async (req ,res)=>{
 
     try{
-        const {skill,location,name} = req.query;
+        const {term,skill,location,name} = req.query;
         const users = await prisma.user.findMany({
             where : {
                 role : 'TALENT',
+                // GLOBAL TERM SUPPORT ↓
+                ...(term && {
+                    OR: [
+                        {
+                            firstName : {
+                                contains : term,
+                                mode : 'insensitive'
+                            }
+                        },
+                        {
+                            lastName : {
+                                contains : term,
+                                mode : 'insensitive'
+                            }
+                        },
+                        {
+                            location : {
+                                contains : term,
+                                mode : 'insensitive'
+                            }
+                        },
+                        {
+                            skills : {
+                                some : {
+                                    skill : {
+                                        name : {
+                                            contains : term,
+                                            mode : 'insensitive'
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }),
+
+                // SPECIFIC FILTERS ↓
                 ...(skill && {
                     skills : {
                         some : {
