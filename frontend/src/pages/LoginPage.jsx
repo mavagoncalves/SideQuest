@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { GraduationCap, Lock, Mail } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import apiClient from "../api/axiosClient";
 
 import Footer from "../components/Footer.jsx";
@@ -128,9 +128,9 @@ function LoginPage() {
 
           <p className="mt-5 text-center text-sm text-slate-600">
             Don't have an account?{" "}
-            <button className="font-bold text-orange-600" type="button">
-              Sign up
-            </button>
+            <Link className="font-extrabold text-orange-600 hover:text-orange-700" to="/register">
+            Sign up
+            </Link>
           </p>
         </form>
       </section>
