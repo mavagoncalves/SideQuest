@@ -2,9 +2,40 @@ import React from 'react'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import ServiceCard from '../components/ServiceCard'
+import SearchBar from '../components/SearchBar';
+import axiosClient from '../api/axiosClient';
 
 const HomePage = () => {
-  const dummyPosts = [1, 2, 3, 4, 5];
+  const [services, setServices] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      setLoading(true);
+      try {
+        //ROBERTO tal vez esto lo necesites o te interese para el backend (lo del url)
+        const url = searchQuery ? `/marketplace?term=${searchQuery}` : '/marketplace';  
+        const response = await axiosClient.get(url);
+
+        setServices(response.data);
+      } catch (error) {
+        console.error("Fetch error:", error);
+        setServices([]); // keeping empty if backend is down 
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // wait for user to stop typing (Debounce)
+    const timer = setTimeout(() => {
+      fetchServices();
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar/>
