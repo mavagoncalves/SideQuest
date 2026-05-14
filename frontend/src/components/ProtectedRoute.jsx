@@ -2,10 +2,9 @@ import React from 'react'
 import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
-    // just need to replace this "true" with real logic, right now is just dummy variable
-    const isAuthenticated = false; 
+    const token = localStorage.getItem('token');
 
-    if (!isAuthenticated) {
+    if (!token) {
         return <Navigate to="/login" replace />;
     }
 
