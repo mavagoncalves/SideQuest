@@ -192,19 +192,19 @@ const PublicProfile = () => {
                         </div>
 
                         <div className="rounded-xl border border-white/50 bg-white/15 p-5 backdrop-blur-sm md:w-60 md:mr-12">
-                            <p className="text-sm font-semibold text-white/85">Starting budget</p>
+                            <p className="text-sm font-semibold text-white/86">Starting budget</p>
                             
                             {isEditing ? (
-                                <div className="mt-1 flex items-center text-3xl font-extrabold">
-                                    <span className="text-xl mr-2">From</span>
+                                <div className="mt-1 flex items-center text-2xl font-extrabold">
+                                    <span className="text-lg mr-2">From</span>
                                     <input 
                                         name="startingPrice" type="number" value={userProfile.startingPrice} onChange={handleChange} 
-                                        className="bg-transparent border-b border-dashed border-white/60 outline-none w-20 focus:border-solid" 
+                                        className="bg-transparent border-b border-dashed border-white/60 outline-none w-16 focus:border-solid" 
                                     />
                                     <span className="ml-2">SEK</span>
                                 </div>
                             ) : (
-                                <p className="mt-1 text-3xl font-extrabold">From {userProfile.startingPrice} SEK</p>
+                                <p className="mt-1 text-2xl font-extrabold">From {userProfile.startingPrice} SEK</p>
                             )}
 
                             {!isOwner && (
