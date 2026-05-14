@@ -10,7 +10,7 @@ const SearchBar = ({ value, onChange }) => {
       <input
         type="text"
         placeholder="Try 'Tutoring'"
-        className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl shadow-sm outline-none focus:ring-2 focus:ring-orange-500 transition-all"
+        className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl shadow-sm outline-none focus:ring-2"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
