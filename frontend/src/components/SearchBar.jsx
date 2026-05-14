@@ -9,7 +9,7 @@ const SearchBar = ({ value, onChange }) => {
       </div>
       <input
         type="text"
-        placeholder="Try 'Tutoring'"
+        placeholder="Try something like 'Tutoring'"
         className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl shadow-sm outline-none focus:ring-2"
         value={value}
         onChange={(e) => onChange(e.target.value)}

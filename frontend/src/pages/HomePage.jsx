@@ -14,7 +14,6 @@ const HomePage = () => {
     const fetchServices = async () => {
       setLoading(true);
       try {
-        //ROBERTO tal vez esto lo necesites o te interese para el backend (lo del url)
         const url = searchQuery ? `/marketplace?term=${searchQuery}` : '/marketplace';  
         const response = await axiosClient.get(url);
 
@@ -54,13 +53,13 @@ const HomePage = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.length > 0 ? (
-                services.map((service) => (
+                services.map((user) => (
                   <ServiceCard 
-                    key={service.id} 
-                    id={service.id}
-                    title={service.title}
-                    price={service.price}
-                    providerName={service.providerName}
+                    key={user.id} 
+                    id={user.id}
+                    title={user.skills?.[0]?.skill?.name}
+                    price={0}
+                    providerName={`${user.firstName} ${user.lastName}`}
                   />
                 ))
               ) : (
