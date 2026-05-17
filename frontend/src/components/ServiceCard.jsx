@@ -10,6 +10,7 @@ const ServiceCard = ({ id, title, price, providerName }) => {
           <p>Image</p>
         </div>
       </div>
+      
       <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">
         {providerName || "Provider"}
       </p>
@@ -18,7 +19,7 @@ const ServiceCard = ({ id, title, price, providerName }) => {
 
       <div className="mt-3 flex items-center justify-between">
         <span className="text-xl font-black text-gray-900">
-          ${price || "0.00"}
+          {price > 0 ? `${price} SEK` : "Price on request"}
         </span>
       
         <Link 
