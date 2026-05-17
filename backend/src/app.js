@@ -5,6 +5,7 @@ import { prisma } from "../prisma/prisma.js";
 import authRoutes from "./routes/auth.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
 import marketplaceRoutes from './routes/marketplace.routes.js';
+import reviewRoutes from "./routes/review.routes.js";
 import userRoutes from "./routes/user.routes.js";
 
 const app = express();
@@ -19,6 +20,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/profiles", profileRoutes);
 app.use("/auth", authRoutes);
+app.use("/reviews", reviewRoutes);
 app.use("/users", userRoutes);
 
 app.get("/users", async (_req, res, next) => {
