@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import { User } from 'lucide-react';
 
 const StudentCard = ({ id, name, skills, location}) => {
   return (
