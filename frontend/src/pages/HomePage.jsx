@@ -3,7 +3,7 @@ import Footer from '../components/Footer'
 import Navbar from '../components/Navbar'
 import StudentCard from '../components/StudentCard' 
 import SearchBar from '../components/SearchBar';
-import axiosClient from '../api/axiosClient';
+import apiClient from '../api/axiosClient';
 
 const HomePage = () => {
   const [students, setStudents] = useState([]);
@@ -15,7 +15,7 @@ const HomePage = () => {
       setLoading(true);
       try {
         const url = searchQuery ? `/marketplace?term=${searchQuery}` : '/marketplace';  
-        const response = await axiosClient.get(url);
+        const response = await apiClient.get(url);
         setStudents(response.data);
       } catch (error) {
         console.error("Fetch error:", error);
