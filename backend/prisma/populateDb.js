@@ -112,6 +112,22 @@ const connectProfilesToSkillTags = async (seededProfilesByEmail, seededSkillTags
   return connectionCount;
 };
 
+const getSeedSummary = async () => {
+  const [userCount, profileCount, skillTagCount, profileSkillTagCount] = await Promise.all([
+    prisma.user.count(),
+    prisma.profile.count(),
+    prisma.skillTag.count(),
+    prisma.profileSkillTag.count()
+  ]);
+
+  return {
+    userCount,
+    profileCount,
+    skillTagCount,
+    profileSkillTagCount
+  };
+};
+
 const main = async () => {
   const passwordHash = await hashSeedPassword();
   const seededUsersByEmail = await upsertUsers(passwordHash);
@@ -126,6 +142,12 @@ const main = async () => {
   console.log(`Seeded ${seededProfilesByEmail.size} demo profiles.`);
   console.log(`Seeded ${seededSkillTagsByName.size} skill tags.`);
   console.log(`Connected ${profileSkillTagConnections} profile skill tags.`);
+
+  const summary = await getSeedSummary();
+
+  console.log(
+    `Database totals: ${summary.userCount} users, ${summary.profileCount} profiles, ${summary.skillTagCount} skill tags, ${summary.profileSkillTagCount} profile skill tag links.`
+  );
 };
 
 main().catch((error) => {
