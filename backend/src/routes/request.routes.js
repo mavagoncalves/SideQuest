@@ -7,6 +7,6 @@ const router = express.Router();
 router.post("/", createRequest);
 router.get("/talent/:talentId", getTalentRequests);
 router.get("/client/:clientId", getClientRequests);
-router.patch("/:id", updateRequestStatus);
+router.patch("/:id/status", updateRequestStatus);
 
 export default router;
