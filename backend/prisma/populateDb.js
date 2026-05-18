@@ -66,7 +66,7 @@ const upsertProfiles = async (seededUsersByEmail) => {
 };
 
 const upsertSkillTags = async () => {
-  const seededSkillTags = [];
+  const seededSkillTagsByName = new Map();
 
   for (const name of skillTags) {
     const skillTag = await prisma.skillTag.upsert({
@@ -75,13 +75,13 @@ const upsertSkillTags = async () => {
       create: { name }
     });
 
-    seededSkillTags.push(skillTag);
+    seededSkillTagsByName.set(skillTag.name, skillTag);
   }
 
-  return seededSkillTags;
+  return seededSkillTagsByName;
 };
 
-const connectProfilesToSkillTags = async (seededProfilesByEmail) => {
+const connectProfilesToSkillTags = async (seededProfilesByEmail, seededSkillTagsByName) => {
   let connectionCount = 0;
 
   for (const user of users) {
@@ -92,9 +92,11 @@ const connectProfilesToSkillTags = async (seededProfilesByEmail) => {
     });
 
     for (const skillTagName of user.skillTags) {
-      const skillTag = await prisma.skillTag.findUnique({
-        where: { name: skillTagName }
-      });
+      const skillTag = seededSkillTagsByName.get(skillTagName);
+
+      if (!skillTag) {
+        throw new Error(`Missing seed skill tag: ${skillTagName}`);
+      }
 
       await prisma.profileSkillTag.create({
         data: {
@@ -114,12 +116,15 @@ const main = async () => {
   const passwordHash = await hashSeedPassword();
   const seededUsersByEmail = await upsertUsers(passwordHash);
   const seededProfilesByEmail = await upsertProfiles(seededUsersByEmail);
-  const seededSkillTags = await upsertSkillTags();
-  const profileSkillTagConnections = await connectProfilesToSkillTags(seededProfilesByEmail);
+  const seededSkillTagsByName = await upsertSkillTags();
+  const profileSkillTagConnections = await connectProfilesToSkillTags(
+    seededProfilesByEmail,
+    seededSkillTagsByName
+  );
 
   console.log(`Seeded ${seededUsersByEmail.size} demo users.`);
   console.log(`Seeded ${seededProfilesByEmail.size} demo profiles.`);
-  console.log(`Seeded ${seededSkillTags.length} skill tags.`);
+  console.log(`Seeded ${seededSkillTagsByName.size} skill tags.`);
   console.log(`Connected ${profileSkillTagConnections} profile skill tags.`);
 };
 
