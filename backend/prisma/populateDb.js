@@ -6,7 +6,7 @@ import { demoPassword, users } from "./seedData.js";
 const hashSeedPassword = async () => bcrypt.hash(demoPassword, 10);
 
 const upsertUsers = async (passwordHash) => {
-  const seededUsers = [];
+  const seededUsersByEmail = new Map();
 
   for (const user of users) {
     const seededUser = await prisma.user.upsert({
@@ -26,17 +26,52 @@ const upsertUsers = async (passwordHash) => {
       }
     });
 
-    seededUsers.push(seededUser);
+    seededUsersByEmail.set(user.email, seededUser);
   }
 
-  return seededUsers;
+  return seededUsersByEmail;
+};
+
+const upsertProfiles = async (seededUsersByEmail) => {
+  const seededProfiles = [];
+
+  for (const user of users) {
+    const seededUser = seededUsersByEmail.get(user.email);
+
+    const profile = await prisma.profile.upsert({
+      where: { userId: seededUser.id },
+      update: {
+        headline: user.headline,
+        bio: user.bio,
+        location: user.location,
+        hourlyRateCents: user.hourlyRateCents,
+        avatarUrl: user.avatarUrl,
+        availability: user.availability
+      },
+      create: {
+        userId: seededUser.id,
+        headline: user.headline,
+        bio: user.bio,
+        location: user.location,
+        hourlyRateCents: user.hourlyRateCents,
+        avatarUrl: user.avatarUrl,
+        availability: user.availability
+      }
+    });
+
+    seededProfiles.push(profile);
+  }
+
+  return seededProfiles;
 };
 
 const main = async () => {
   const passwordHash = await hashSeedPassword();
-  const seededUsers = await upsertUsers(passwordHash);
+  const seededUsersByEmail = await upsertUsers(passwordHash);
+  const seededProfiles = await upsertProfiles(seededUsersByEmail);
 
-  console.log(`Seeded ${seededUsers.length} demo users.`);
+  console.log(`Seeded ${seededUsersByEmail.size} demo users.`);
+  console.log(`Seeded ${seededProfiles.length} demo profiles.`);
 };
 
 main().catch((error) => {
