@@ -60,7 +60,7 @@ export const getClientRequests = async (req, res)=>{
         const requests = await prisma.request.findMany({
             where : {clientId},
             include : {
-                client : true,
+                talent : true,
             },
             orderBy : {
                 createdAt : "desc",
