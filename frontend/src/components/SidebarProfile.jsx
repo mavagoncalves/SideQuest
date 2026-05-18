@@ -10,6 +10,13 @@ const SidebarProfile = ({
     handleKeyDown, 
     removeSkillTag
 }) => {
+    const TAG_COLORS = [
+        'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100',
+        'bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100',
+        'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100',
+        'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+    ];
+    
     return (
         <aside className="space-y-6">
             {/* skill tags */}
@@ -33,23 +40,28 @@ const SidebarProfile = ({
                 {/* bubble container */}
                 <div className="mt-4 flex flex-wrap gap-3">
                     {userProfile.skills && userProfile.skills.length > 0 ? (
-                        userProfile.skills.map((skill, index) => (
-                            <span 
-                                className="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-700" 
-                                key={index}
-                            >
-                                {skill}
-                                {isEditing && (
-                                    <button
-                                        type="button"
-                                        onClick={() => removeSkillTag(index)}
-                                        className="hover:bg-orange-200 text-orange-600 rounded-full p-0.5 transition-colors flex items-center justify-center"
-                                    >
-                                        <X size={14} />
-                                    </button>
-                                )}
-                            </span>
-                        ))
+                        userProfile.skills.map((skill, index) => {
+                            // picks a color from array based on the tags number position 
+                            const colorClass = TAG_COLORS[index % TAG_COLORS.length];
+
+                            return (
+                                <span 
+                                    className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-bold shadow-xs transition-all ${colorClass}`} 
+                                    key={index}
+                                >
+                                    {skill}
+                                    {isEditing && (
+                                        <button
+                                            type="button"
+                                            onClick={() => removeSkillTag(index)}
+                                            className="hover:bg-black/5 rounded-full p-0.5 transition-colors flex items-center justify-center text-slate-500"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
+                                </span>
+                            );
+                        })
                     ) : (
                         <p className="text-sm text-slate-500 italic">No skills added yet.</p>
                     )}
@@ -94,4 +106,4 @@ const SidebarProfile = ({
     )
 }
 
-export default SidebarProfile
+export default SidebarProfile;
