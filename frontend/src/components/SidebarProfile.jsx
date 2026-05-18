@@ -1,16 +1,53 @@
 import React from 'react'
-import { BriefcaseBusiness, Clock, Mail, MessageCircle, Star } from 'lucide-react'
+import { Star, BriefcaseBusiness, Clock, Mail, X } from 'lucide-react';
 
-const SidebarProfile = ({ userProfile, isOwner }) => {
+const SidebarProfile = ({ 
+    userProfile, 
+    isOwner,
+    isEditing, 
+    tagInput, 
+    setTagInput, 
+    handleKeyDown, 
+    removeSkillTag
+}) => {
     return (
         <aside className="space-y-6">
+            {/* skill tags */}
             <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
                 <h2 className="text-xl font-bold">Skills</h2>
+                
+                {/* Show text input only when editing is active */}
+                {isEditing && (
+                    <div className="mt-3">
+                        <input
+                            type="text"
+                            value={tagInput}
+                            onChange={(e) => setTagInput(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            className="w-full bg-orange-50/50 border border-orange-200 rounded-lg p-2.5 outline-none focus:border-orange-400 placeholder:text-slate-400 text-xs"
+                            placeholder="Type a skill and press Enter..."
+                        />
+                    </div>
+                )}
+
+                {/* bubble container */}
                 <div className="mt-4 flex flex-wrap gap-3">
-                    {userProfile.skills.length > 0 ? (
+                    {userProfile.skills && userProfile.skills.length > 0 ? (
                         userProfile.skills.map((skill, index) => (
-                            <span className="rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-700" key={index}>
+                            <span 
+                                className="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-700" 
+                                key={index}
+                            >
                                 {skill}
+                                {isEditing && (
+                                    <button
+                                        type="button"
+                                        onClick={() => removeSkillTag(index)}
+                                        className="hover:bg-orange-200 text-orange-600 rounded-full p-0.5 transition-colors flex items-center justify-center"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                )}
                             </span>
                         ))
                     ) : (
