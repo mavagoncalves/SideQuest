@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt'
 import { prisma } from '../../prisma/prisma.js';
 
-export const registerUser = async(email,password, firstName, lastName)=>{
+export const registerUser = async(email, password, firstName, lastName, role)=>{
     const hashedPassword = await bcrypt.hash(password,10);
 
     return prisma.user.create({
@@ -9,7 +9,8 @@ export const registerUser = async(email,password, firstName, lastName)=>{
             email,
             passwordHash: hashedPassword,
             firstName,  
-            lastName
+            lastName,
+            role: role || 'CLIENT'
         }
     });
 };
