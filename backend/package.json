@@ -8,7 +8,8 @@
     "start": "node src/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "populateDb": "prisma db seed"
   },
   "keywords": [],
   "author": "",
@@ -28,5 +29,8 @@
     "nodemon": "^3.1.14",
     "prisma": "^5.22.0"
   },
-  "private": true
+  "private": true,
+  "prisma": {
+    "seed": "node prisma/populateDb.js"
+  }
 }
