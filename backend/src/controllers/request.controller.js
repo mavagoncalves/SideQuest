@@ -52,3 +52,41 @@ export const getTalentRequests = async (req, res)=>{
 };
 
 
+// GET => REQUESTS SENT (CLIENT pov)
+export const getClientRequests = async (req, res)=>{
+    try{
+        const {clientId} = req.params;
+        
+        const requests = await prisma.request.findMany({
+            where : {clientId},
+            include : {
+                client : true,
+            },
+            orderBy : {
+                createdAt : "desc",
+            },
+        });
+
+        res.json(requests);
+    }   catch (error) {
+        res.status(500).json({error:"INTERNAL_SERVER_ERROR"});
+    }
+};
+
+
+// UPDATE OF REQUEST STATUS (ACCEPT / REJECT) for TALENT only
+export const updateRequestStatus = async (req, res)=>{
+    try {
+        const {id} = req.params;
+        const {status} = req.body;
+
+        const updated = await prisma.request.update({
+            where : {id},
+            data : {status},
+        });
+
+        res.json(updated);
+    }   catch(error) {
+            res.status(500).json({error: "INTERNTAL_SERVER_ERROR"});
+    }
+};
