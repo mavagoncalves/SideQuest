@@ -84,14 +84,14 @@ export const getMarketPlaceUsers = async (req ,res)=>{
                     include : {
                         skillTags : {
                             include : {
-                                skillTags : True
+                                skillTags : true
                             }
                         }
                     }
                 },
                 skills : {
                     include : {
-                        skill : True
+                        skill : true
                     }
                 }
             },
