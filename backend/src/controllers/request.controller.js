@@ -80,6 +80,18 @@ export const updateRequestStatus = async (req, res)=>{
         const {id} = req.params;
         const {status} = req.body;
 
+        const request = await prisma.request.findUnique({
+            where : {id}
+        });
+
+        if (!request) {
+            return res.status(404).json({error : "NOT_FOUND"})
+        };
+        //CHECKS PROPER USER FOR UPDATE
+        if (request.talentId !== req.user.id) {
+            return res.status(403).json ({error : "FORBIDDEN"})
+        }
+
         const updated = await prisma.request.update({
             where : {id},
             data : {status},
