@@ -1,21 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Star, BriefcaseBusiness, Clock, Mail, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const SidebarProfile = ({ 
     userProfile, 
+    setUserProfile,
     isOwner,
-    isEditing, 
-    tagInput, 
-    setTagInput, 
-    handleKeyDown, 
-    removeSkillTag
+    isEditing
 }) => {
+    const [tagInput, setTagInput] = useState('')
+
     const TAG_COLORS = [
         'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100',
         'bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100',
         'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100',
         'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
     ];
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); 
+            const trimmedValue = tagInput.trim();
+
+            if (trimmedValue) {
+                if (userProfile.skills.includes(trimmedValue)) {
+                    toast.error("Skill has already been added.");
+                    return;
+                }
+
+                setUserProfile(prev => ({
+                    ...prev,
+                    skills: [...prev.skills, trimmedValue]
+                }));
+                setTagInput(''); 
+            }
+        }
+    };
+
+    const removeSkillTag = (indexToRemove) => {
+        setUserProfile(prev => ({
+            ...prev,
+            skills: prev.skills.filter((_, index) => index !== indexToRemove)
+        }));
+    };
     
     return (
         <aside className="space-y-6">
