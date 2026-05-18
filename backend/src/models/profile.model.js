@@ -17,10 +17,12 @@ const profileInclude = {
   }
 };
 
-const buildSkillTagConnections = (skillTags = []) => {
-  const uniqueTags = [...new Set(skillTags.map((tag) => tag.trim()).filter(Boolean))];
+const normalizeSkillTagNames = (skillTags = []) => [
+  ...new Set(skillTags.map((tag) => tag.trim()).filter(Boolean))
+];
 
-  return uniqueTags.map((name) => ({
+const buildSkillTagConnections = (skillTags = []) => {
+  return normalizeSkillTagNames(skillTags).map((name) => ({
     skillTag: {
       connectOrCreate: {
         where: { name },
