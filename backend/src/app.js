@@ -7,6 +7,7 @@ import profileRoutes from "./routes/profile.routes.js";
 import marketplaceRoutes from './routes/marketplace.routes.js';
 import reviewRoutes from "./routes/review.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import requestRoutes from "./routes/request.routes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/profiles", profileRoutes);
 app.use("/auth", authRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/users", userRoutes);
+app.use("/requests", requestRoutes)
 
 app.get("/users", async (_req, res, next) => {
   try {

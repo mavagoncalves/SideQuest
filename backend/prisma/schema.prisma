@@ -31,6 +31,10 @@ model User {
   reviewsGiven    Review[] @relation("ReviewsGiven")
   reviewsReceived Review[] @relation("ReviewsReceived")
 
+  //⬇ requests relations (client => talent / sent & received) ⬇
+  clientRequests Request[] @relation("ClientRequests")
+  talentRequests Request[] @relation("TalentRequests")
+
   @@index([role])
   @@index([location])
 }
@@ -101,4 +105,35 @@ model Review {
   // Relations
   reviewer   User     @relation("ReviewsGiven", fields: [reviewerId], references: [id], onDelete: Cascade)
   reviewee   User     @relation("ReviewsReceived", fields: [revieweeId], references: [id], onDelete: Cascade)
+}
+
+// REQUESTS
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Request {
+  id            String   @id @default(cuid())
+
+  title         String
+  message       String   @db.Text
+  proposedPrice Int?
+
+  status        RequestStatus @default(PENDING)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  clientId      String
+  talentId      String
+
+  client        User @relation("ClientRequests", fields: [clientId], references: [id], onDelete: Cascade)
+  talent        User @relation("TalentRequests", fields: [talentId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+  @@index([talentId])
+  @@index([status])
 }
