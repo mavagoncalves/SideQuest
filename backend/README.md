@@ -38,7 +38,21 @@ Express + Prisma backend for SideQuest, written in JavaScript.
    npm run prisma:migrate
    ```
 
-6. Start the API:
+6. Optionally populate the database with demo data:
+
+   ```bash
+   npm run populateDb
+   ```
+
+   The seed script creates demo users, profiles, and skill tags. It is safe to rerun because it updates existing seed records instead of creating duplicate users or tags.
+
+   Demo users share this password:
+
+   ```text
+   Password123!
+   ```
+
+7. Start the API:
 
    ```bash
    npm run dev
