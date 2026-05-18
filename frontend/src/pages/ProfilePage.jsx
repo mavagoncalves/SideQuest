@@ -8,33 +8,15 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SidebarProfile from '../components/SidebarProfile'
 
-const sampleReviews = [
-    {
-        name: 'Sara Lind',
-        role: 'Computer Science student',
-        rating: 5,
-        date: '2 weeks ago',
-        text: 'Super easy to work with and delivered exactly what I needed for my project. Clear communication from start to finish.'
-    },
-    {
-        name: 'Jonas Berg',
-        role: 'Business student',
-        rating: 4,
-        date: '1 month ago',
-        text: 'Helped me clean up a presentation deck before a class pitch. Fast response and really thoughtful suggestions.'
-    },
-    {
-        name: 'Maya Chen',
-        role: 'Design student',
-        rating: 5,
-        date: '2 months ago',
-        text: 'Great attention to detail and very reliable. I would definitely send another Quest Request.'
-    }
-]
-
-const averageRating = sampleReviews.length
-    ? (sampleReviews.reduce((total, review) => total + review.rating, 0) / sampleReviews.length).toFixed(1)
+const getAverageRating = (reviews) => reviews.length
+    ? (reviews.reduce((total, review) => total + review.rating, 0) / reviews.length).toFixed(1)
     : '0.0'
+
+const formatReviewDate = (date) => new Date(date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+})
 
 const ProfilePage = () => {
     const { id } = useParams() 
@@ -44,10 +26,11 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false)
     const [profileDbId, setProfileDbId] = useState(null) 
     const [loggedInUser, setLoggedInUser] = useState(null)
+    const [reviews, setReviews] = useState([])
 
     const [userProfile, setUserProfile] = useState({
         firstName: '', lastName: '', title: '', school: '', location: '',
-        rating: averageRating, completedQuests: sampleReviews.length, responseTime: 'Not set',
+        rating: '0.0', completedQuests: 0, responseTime: 'Not set',
         startingPrice: 0, bio: '', skills: [], services: []
     })
     
@@ -69,6 +52,15 @@ const ProfilePage = () => {
                 const response = await apiClient.get(`/profiles/user/${targetUserId}`)
                 const dbProfile = response.data
                 setProfileDbId(dbProfile.id) 
+
+                let loadedReviews = []
+                try {
+                    const reviewsResponse = await apiClient.get(`/reviews/user/${targetUserId}`)
+                    loadedReviews = reviewsResponse.data || []
+                    setReviews(loadedReviews)
+                } catch {
+                    setReviews([])
+                }
                 
                 // Fetching real name from the DB first, falling back to storage if missing
                 const loadedData = {
@@ -79,7 +71,7 @@ const ProfilePage = () => {
                     startingPrice: dbProfile.hourlyRateCents ? dbProfile.hourlyRateCents / 100 : 0,
                     bio: dbProfile.bio || '',
                     skills: dbProfile.skillTags || [],
-                    school: '', rating: averageRating, completedQuests: sampleReviews.length, responseTime: 'Not set', services: [] 
+                    school: '', rating: getAverageRating(loadedReviews), completedQuests: loadedReviews.length, responseTime: 'Not set', services: [] 
                 }
 
                 setUserProfile(loadedData)
@@ -148,6 +140,8 @@ const ProfilePage = () => {
     const avatarLetters = (userProfile.firstName || userProfile.lastName) 
         ? `${userProfile.firstName?.charAt(0) || ''}${userProfile.lastName?.charAt(0) || ''}`.toUpperCase() 
         : 'SQ'
+
+    const averageRating = getAverageRating(reviews)
 
     if (isLoading) return <div className="flex min-h-screen items-center justify-center bg-[#fff7f4]">Loading...</div>
 
@@ -220,21 +214,22 @@ const ProfilePage = () => {
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                                 <div>
                                     <h2 className="text-2xl font-bold">Reviews</h2>
-                                    <p className="mt-2 text-sm text-slate-500">Feedback from students who sent completed Quest Requests.</p>
+                                    <p className="mt-2 text-sm text-slate-500">Feedback from clients </p>
                                 </div>
                                 <div className="flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-700">
                                     <Star size={17} className="fill-orange-500 text-orange-500" />
-                                    <span>{averageRating} from {sampleReviews.length} reviews</span>
+                                    <span>{averageRating} from {reviews.length} reviews</span>
                                 </div>
                             </div>
 
                             <div className="mt-5 grid gap-4">
-                                {sampleReviews.map((review, index) => (
-                                    <article className="rounded-lg border border-orange-100 bg-orange-50/40 p-5" key={index}>
+                                {reviews.length > 0 ? (
+                                    reviews.map((review) => (
+                                    <article className="rounded-lg border border-orange-100 bg-orange-50/40 p-5" key={review.id}>
                                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                             <div>
-                                                <h3 className="font-bold">{review.name}</h3>
-                                                <p className="mt-1 text-sm text-slate-500">{review.role}</p>
+                                                <h3 className="font-bold">{review.reviewer?.firstName} {review.reviewer?.lastName}</h3>
+                                                <p className="mt-1 text-sm text-slate-500">SideQuest client</p>
                                             </div>
                                             <div className="flex items-center gap-2 text-sm font-semibold text-slate-500">
                                                 <div className="flex">
@@ -246,12 +241,17 @@ const ProfilePage = () => {
                                                         />
                                                     ))}
                                                 </div>
-                                                <span>{review.date}</span>
+                                                <span>{formatReviewDate(review.createdAt)}</span>
                                             </div>
                                         </div>
-                                        <p className="mt-4 leading-6 text-slate-600">{review.text}</p>
+                                        <p className="mt-4 leading-6 text-slate-600">{review.comment || 'No written comment.'}</p>
                                     </article>
-                                ))}
+                                    ))
+                                ) : (
+                                    <p className="rounded-lg border border-dashed border-orange-200 bg-orange-50/40 p-5 text-sm text-slate-500">
+                                        No reviews yet. Completed SideQuest Requests will show up here once clients leave feedback.
+                                    </p>
+                                )}
                             </div>
                         </div>
 
