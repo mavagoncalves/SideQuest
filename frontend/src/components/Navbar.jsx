@@ -39,6 +39,7 @@ const Navbar = () => {
             {/* Always visible links */}
 
             {/* I commented out the link for admin, before it was just as a template idea, but idk what is gonna be done with it */}
+            
             {/* <Link
               to="/admin"
               className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-orange-600 font-bold text-sm transition-colors"
