@@ -20,6 +20,11 @@ const App =() =>{
         <Route path='/register' element={<SignupPage/>}/>
         <Route path='/profile:id' element={<ProfilePage/>}/>
         <Route path="/service/:id" element={<ServiceDetail />} />
+
+        {/**
+         * TESTING PURPOSES
+         */}
+         <Route path='/profile_view' element={<ProfilePage/>} />
         
 
         {/* Only logged in users can access these */}
