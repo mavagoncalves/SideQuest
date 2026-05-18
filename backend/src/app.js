@@ -22,6 +22,7 @@ app.use("/profiles", profileRoutes);
 app.use("/auth", authRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/users", userRoutes);
+app.use('/marketplace', marketplaceRoutes);
 
 app.get("/users", async (_req, res, next) => {
   try {

@@ -15,7 +15,7 @@ function SignupPage() {
     lastName: "",
     email: "",
     password: "",
-    role: "Student",
+    role: "TALENT",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -156,8 +156,8 @@ function SignupPage() {
               value={formData.role}
               onChange={handleChange}
             >
-              <option value="Student">Student</option>
-              <option value="Client">Client</option>
+              <option value="TALENT">Student</option>
+              <option value="CLIENT">Client</option>
             </select>
           </div>
 

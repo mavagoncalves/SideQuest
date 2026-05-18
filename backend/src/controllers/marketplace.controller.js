@@ -110,7 +110,9 @@ export const getMarketPlaceUserById = async(req , res)=>{
                     include:{
                         skill:true
                     }
-                }
+                },
+                profile: true,
+                reviewsReceived: true
             }
         });
 
