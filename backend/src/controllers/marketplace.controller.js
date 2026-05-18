@@ -119,6 +119,20 @@ export const getMarketPlaceUserById = async(req , res)=>{
             where :{id},
 
             include: {
+
+                profile : {
+                    include : {
+                        skillTags : {
+                            include : {
+                                skillTag : true
+                            }
+                        }
+                    }
+                },
+
+                // GET REVIEWS ("reviewsReceived" in DB)
+                reviewsReceived : true,
+
                 skills:{
                     include:{
                         skill:true
