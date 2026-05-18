@@ -10,13 +10,12 @@ import SidebarProfile from '../components/SidebarProfile'
 
 const ProfilePage = () => {
     const { id } = useParams() 
-    
+
     const [isLoading, setIsLoading] = useState(true)
     const [isOwner, setIsOwner] = useState(false)
     const [isEditing, setIsEditing] = useState(false)
     const [profileDbId, setProfileDbId] = useState(null) 
     const [loggedInUser, setLoggedInUser] = useState(null)
-    const [tagInput, setTagInput] = useState('')    // Local temporary input state for the skill tags field
 
     const [userProfile, setUserProfile] = useState({
         firstName: '', lastName: '', title: '', school: '', location: '',
@@ -119,35 +118,6 @@ const ProfilePage = () => {
         setIsEditing(false)
     }
 
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault(); // prevents layout submission refreshes
-            const trimmedValue = tagInput.trim();
-
-            if (trimmedValue) {
-                // keep tags clean and unique
-                if (userProfile.skills.includes(trimmedValue)) {
-                    toast.error("Skill has already been added.");
-                    return;
-                }
-
-                setUserProfile(prev => ({
-                    ...prev,
-                    skills: [...prev.skills, trimmedValue]
-                }));
-                setTagInput(''); // wipe input field text clear
-            }
-        }
-    };
-
-    // handles interactive removal of individual bubble tags
-    const removeSkillTag = (indexToRemove) => {
-        setUserProfile(prev => ({
-            ...prev,
-            skills: prev.skills.filter((_, index) => index !== indexToRemove)
-        }));
-    };
-
     const avatarLetters = (userProfile.firstName || userProfile.lastName) 
         ? `${userProfile.firstName?.charAt(0) || ''}${userProfile.lastName?.charAt(0) || ''}`.toUpperCase() 
         : 'SQ'
@@ -240,15 +210,7 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        <SidebarProfile 
-                            userProfile={userProfile} 
-                            isOwner={isOwner} 
-                            isEditing={isEditing}
-                            tagInput={tagInput}
-                            setTagInput={setTagInput}
-                            handleKeyDown={handleKeyDown}
-                            removeSkillTag={removeSkillTag}
-                        />
+                        <SidebarProfile userProfile={userProfile} setUserProfile={setUserProfile} isOwner={isOwner} isEditing={isEditing}/>
                     </div>
 
                     <div>
