@@ -38,7 +38,7 @@ const StudentCard = ({ id, name, skills, location}) => {
 
         <div className="mt-5 pt-3 border-t border-gray-50 flex items-center justify-between">
           <Link 
-            to={`/service/${id}`} 
+            to={`/profile/${id}`} 
             className="text-orange-600 font-bold text-sm hover:text-orange-700 transition-colors"
           >
             View Profile →
