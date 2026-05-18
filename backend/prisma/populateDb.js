@@ -33,7 +33,7 @@ const upsertUsers = async (passwordHash) => {
 };
 
 const upsertProfiles = async (seededUsersByEmail) => {
-  const seededProfiles = [];
+  const seededProfilesByEmail = new Map();
 
   for (const user of users) {
     const seededUser = seededUsersByEmail.get(user.email);
@@ -59,10 +59,10 @@ const upsertProfiles = async (seededUsersByEmail) => {
       }
     });
 
-    seededProfiles.push(profile);
+    seededProfilesByEmail.set(user.email, profile);
   }
 
-  return seededProfiles;
+  return seededProfilesByEmail;
 };
 
 const upsertSkillTags = async () => {
@@ -81,15 +81,46 @@ const upsertSkillTags = async () => {
   return seededSkillTags;
 };
 
+const connectProfilesToSkillTags = async (seededProfilesByEmail) => {
+  let connectionCount = 0;
+
+  for (const user of users) {
+    const profile = seededProfilesByEmail.get(user.email);
+
+    await prisma.profileSkillTag.deleteMany({
+      where: { profileId: profile.id }
+    });
+
+    for (const skillTagName of user.skillTags) {
+      const skillTag = await prisma.skillTag.findUnique({
+        where: { name: skillTagName }
+      });
+
+      await prisma.profileSkillTag.create({
+        data: {
+          profileId: profile.id,
+          skillTagId: skillTag.id
+        }
+      });
+
+      connectionCount += 1;
+    }
+  }
+
+  return connectionCount;
+};
+
 const main = async () => {
   const passwordHash = await hashSeedPassword();
   const seededUsersByEmail = await upsertUsers(passwordHash);
-  const seededProfiles = await upsertProfiles(seededUsersByEmail);
+  const seededProfilesByEmail = await upsertProfiles(seededUsersByEmail);
   const seededSkillTags = await upsertSkillTags();
+  const profileSkillTagConnections = await connectProfilesToSkillTags(seededProfilesByEmail);
 
   console.log(`Seeded ${seededUsersByEmail.size} demo users.`);
-  console.log(`Seeded ${seededProfiles.length} demo profiles.`);
+  console.log(`Seeded ${seededProfilesByEmail.size} demo profiles.`);
   console.log(`Seeded ${seededSkillTags.length} skill tags.`);
+  console.log(`Connected ${profileSkillTagConnections} profile skill tags.`);
 };
 
 main().catch((error) => {
