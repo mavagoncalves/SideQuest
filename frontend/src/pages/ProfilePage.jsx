@@ -1,12 +1,22 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { GraduationCap, MapPin, Settings, Check, X } from 'lucide-react'
+import { GraduationCap, MapPin, Settings, Check, X, Star } from 'lucide-react'
 import toast from 'react-hot-toast'
 import apiClient from '../api/axiosClient'
 
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import SidebarProfile from '../components/SidebarProfile'
+
+const getAverageRating = (reviews) => reviews.length
+    ? (reviews.reduce((total, review) => total + review.rating, 0) / reviews.length).toFixed(1)
+    : '0.0'
+
+const formatReviewDate = (date) => new Date(date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+})
 
 const ProfilePage = () => {
     const { id } = useParams() 
@@ -16,9 +26,15 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false)
     const [profileDbId, setProfileDbId] = useState(null) 
     const [loggedInUser, setLoggedInUser] = useState(null)
+    const [profileUserId, setProfileUserId] = useState(null)
+    const [reviews, setReviews] = useState([])
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+    const [reviewRating, setReviewRating] = useState(5)
+    const [reviewComment, setReviewComment] = useState('')
+    const [isSubmittingReview, setIsSubmittingReview] = useState(false)
 
     const [userProfile, setUserProfile] = useState({
-        firstName: '', lastName: '', title: '', school: '', location: '',
+        firstName: '', lastName: '', title: '', school: '', location: '', role: '',
         rating: '0.0', completedQuests: 0, responseTime: 'Not set',
         startingPrice: 0, bio: '', skills: [], services: []
     })
@@ -29,7 +45,22 @@ const ProfilePage = () => {
         const fetchProfile = async () => {
             try {
                 setIsLoading(true)
-                const userFromStorage = JSON.parse(localStorage.getItem('user'))
+                let userFromStorage = JSON.parse(localStorage.getItem('user'))
+
+                if (userFromStorage?.id && !userFromStorage.role) {
+                    try {
+                        const usersResponse = await apiClient.get('/users')
+                        const currentUser = usersResponse.data?.find((user) => user.id === userFromStorage.id)
+
+                        if (currentUser) {
+                            userFromStorage = { ...userFromStorage, ...currentUser }
+                            localStorage.setItem('user', JSON.stringify(userFromStorage))
+                        }
+                    } catch {
+                        // Keep loading the profile even if role lookup is unavailable.
+                    }
+                }
+
                 setLoggedInUser(userFromStorage)
                 
                 const targetUserId = id || userFromStorage?.id
@@ -41,17 +72,28 @@ const ProfilePage = () => {
                 const response = await apiClient.get(`/profiles/user/${targetUserId}`)
                 const dbProfile = response.data
                 setProfileDbId(dbProfile.id) 
+                setProfileUserId(targetUserId)
+
+                let loadedReviews = []
+                try {
+                    const reviewsResponse = await apiClient.get(`/reviews/user/${targetUserId}`)
+                    loadedReviews = reviewsResponse.data || []
+                    setReviews(loadedReviews)
+                } catch {
+                    setReviews([])
+                }
                 
                 // Fetching real name from the DB first, falling back to storage if missing
                 const loadedData = {
                     firstName: dbProfile.user?.firstName || userFromStorage?.firstName || '',
                     lastName: dbProfile.user?.lastName || userFromStorage?.lastName || '',
+                    role: dbProfile.user?.role || '',
                     title: dbProfile.headline || '',
                     location: dbProfile.location || '',
                     startingPrice: dbProfile.hourlyRateCents ? dbProfile.hourlyRateCents / 100 : 0,
                     bio: dbProfile.bio || '',
                     skills: dbProfile.skillTags || [],
-                    school: '', rating: '0.0', completedQuests: 0, responseTime: 'Not set', services: [] 
+                    school: '', rating: getAverageRating(loadedReviews), completedQuests: loadedReviews.length, responseTime: 'Not set', services: [] 
                 }
 
                 setUserProfile(loadedData)
@@ -117,9 +159,59 @@ const ProfilePage = () => {
         setIsEditing(false)
     }
 
+    const handleSubmitReview = async (e) => {
+        e.preventDefault()
+
+        if (!loggedInUser?.id || !profileUserId) {
+            toast.error('You need to be logged in to leave a review.')
+            return
+        }
+
+        try {
+            setIsSubmittingReview(true)
+            const response = await apiClient.post('/reviews', {
+                reviewerId: loggedInUser.id,
+                revieweeId: profileUserId,
+                rating: reviewRating,
+                comment: reviewComment.trim()
+            })
+
+            const updatedReviews = [response.data, ...reviews]
+            setReviews(updatedReviews)
+            setUserProfile(prev => ({
+                ...prev,
+                rating: getAverageRating(updatedReviews),
+                completedQuests: updatedReviews.length
+            }))
+            setReviewRating(5)
+            setReviewComment('')
+            setIsReviewModalOpen(false)
+            toast.success('Review submitted!')
+        } catch (error) {
+            toast.error(error.response?.data?.error || 'Failed to submit review')
+        } finally {
+            setIsSubmittingReview(false)
+        }
+    }
+
     const avatarLetters = (userProfile.firstName || userProfile.lastName) 
         ? `${userProfile.firstName?.charAt(0) || ''}${userProfile.lastName?.charAt(0) || ''}`.toUpperCase() 
         : 'SQ'
+
+    const averageRating = getAverageRating(reviews)
+    const profileWithReviewStats = {
+        ...userProfile,
+        rating: averageRating,
+        completedQuests: reviews.length
+    }
+    const loggedInRole = loggedInUser?.role?.toLowerCase()
+    const profileRole = userProfile.role?.toLowerCase()
+    const isClientViewingStudent = Boolean(
+        loggedInUser &&
+        !isOwner &&
+        (loggedInRole === 'client') &&
+        (profileRole === 'talent' || profileRole === 'student')
+    )
 
     if (isLoading) return <div className="flex min-h-screen items-center justify-center bg-[#fff7f4]">Loading...</div>
 
@@ -189,27 +281,62 @@ const ProfilePage = () => {
 
                     <div className="mt-6 grid items-start gap-6 lg:grid-cols-[2fr_1fr]">
                         <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
-                            <h2 className="text-2xl font-bold">Services</h2>
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                                <div>
+                                    <h2 className="text-2xl font-bold">Reviews</h2>
+                                    <p className="mt-2 text-sm text-slate-500">Feedback from clients </p>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <div className="flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-700">
+                                        <Star size={17} className="fill-orange-500 text-orange-500" />
+                                        <span>{averageRating} from {reviews.length} reviews</span>
+                                    </div>
+                                    {isClientViewingStudent && (
+                                        <button
+                                            className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-4 py-2 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90"
+                                            onClick={() => setIsReviewModalOpen(true)}
+                                            type="button"
+                                        >
+                                            Leave a Review
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
                             <div className="mt-5 grid gap-4">
-                                {userProfile.services.length > 0 ? (
-                                    userProfile.services.map((service, index) => (
-                                        <article className="rounded-lg border border-orange-100 bg-orange-50/40 p-5" key={index}>
-                                            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                                                <div>
-                                                    <h3 className="text-lg font-bold">{service.title}</h3>
-                                                    <p className="mt-2 text-sm leading-6 text-slate-600">{service.description}</p>
-                                                </div>
-                                                <p className="shrink-0 rounded-full bg-white px-4 py-2 text-sm font-extrabold text-pink-600">{service.price}</p>
+                                {reviews.length > 0 ? (
+                                    reviews.map((review) => (
+                                    <article className="rounded-lg border border-orange-100 bg-orange-50/40 p-5" key={review.id}>
+                                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                            <div>
+                                                <h3 className="font-bold">{review.reviewer?.firstName} {review.reviewer?.lastName}</h3>
+                                                <p className="mt-1 text-sm text-slate-500">SideQuest client</p>
                                             </div>
-                                        </article>
+                                            <div className="flex items-center gap-2 text-sm font-semibold text-slate-500">
+                                                <div className="flex">
+                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                        <Star
+                                                            key={star}
+                                                            size={16}
+                                                            className={star <= review.rating ? 'fill-orange-500 text-orange-500' : 'text-orange-200'}
+                                                        />
+                                                    ))}
+                                                </div>
+                                                <span>{formatReviewDate(review.createdAt)}</span>
+                                            </div>
+                                        </div>
+                                        <p className="mt-4 leading-6 text-slate-600">{review.comment || 'No written comment.'}</p>
+                                    </article>
                                     ))
                                 ) : (
-                                    <p className="text-sm text-slate-500 italic">No services listed yet.</p>
+                                    <p className="rounded-lg border border-dashed border-orange-200 bg-orange-50/40 p-5 text-sm text-slate-500">
+                                        No reviews yet. Completed SideQuest Requests will show up here once clients leave feedback.
+                                    </p>
                                 )}
                             </div>
                         </div>
 
-                        <SidebarProfile userProfile={userProfile} isOwner={isOwner} />
+                        <SidebarProfile userProfile={profileWithReviewStats} isOwner={isOwner} />
                     </div>
 
                     <div>
@@ -223,6 +350,75 @@ const ProfilePage = () => {
                 </section>
             </main>
             <Footer />
+
+            {isReviewModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4">
+                    <div className="w-full max-w-md rounded-xl border border-orange-200 bg-white p-6 shadow-xl">
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <h2 className="text-2xl font-bold">Leave a Review</h2>
+                                <p className="mt-1 text-sm text-slate-500">
+                                    Share feedback for {userProfile.firstName || 'this student'}.
+                                </p>
+                            </div>
+                            <button
+                                className="rounded-full p-2 text-slate-500 transition-colors hover:bg-orange-50 hover:text-slate-900"
+                                onClick={() => setIsReviewModalOpen(false)}
+                                type="button"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <form className="mt-5" onSubmit={handleSubmitReview}>
+                            <label className="block text-sm font-bold">Rating</label>
+                            <div className="mt-2 flex gap-1">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <button
+                                        className="rounded-md p-1 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                                        key={star}
+                                        onClick={() => setReviewRating(star)}
+                                        type="button"
+                                    >
+                                        <Star
+                                            size={30}
+                                            className={star <= reviewRating ? 'fill-orange-500 text-orange-500' : 'text-orange-200'}
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+
+                            <label className="mt-5 block text-sm font-bold" htmlFor="reviewComment">
+                                Comment
+                            </label>
+                            <textarea
+                                className="mt-2 min-h-[120px] w-full rounded-lg border border-orange-200 bg-orange-50/40 p-3 leading-6 text-slate-700 outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                                id="reviewComment"
+                                onChange={(e) => setReviewComment(e.target.value)}
+                                placeholder="What was it like working with this student?"
+                                value={reviewComment}
+                            />
+
+                            <div className="mt-6 flex justify-end gap-2">
+                                <button
+                                    className="rounded-full border border-orange-200 bg-white px-4 py-2 font-bold text-slate-700 transition-colors hover:bg-orange-50"
+                                    onClick={() => setIsReviewModalOpen(false)}
+                                    type="button"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-5 py-2 font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                                    disabled={isSubmittingReview}
+                                    type="submit"
+                                >
+                                    {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
