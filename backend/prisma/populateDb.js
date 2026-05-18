@@ -1,7 +1,7 @@
 import "dotenv/config";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prisma.js";
-import { demoPassword, users } from "./seedData.js";
+import { demoPassword, skillTags, users } from "./seedData.js";
 
 const hashSeedPassword = async () => bcrypt.hash(demoPassword, 10);
 
@@ -65,13 +65,31 @@ const upsertProfiles = async (seededUsersByEmail) => {
   return seededProfiles;
 };
 
+const upsertSkillTags = async () => {
+  const seededSkillTags = [];
+
+  for (const name of skillTags) {
+    const skillTag = await prisma.skillTag.upsert({
+      where: { name },
+      update: {},
+      create: { name }
+    });
+
+    seededSkillTags.push(skillTag);
+  }
+
+  return seededSkillTags;
+};
+
 const main = async () => {
   const passwordHash = await hashSeedPassword();
   const seededUsersByEmail = await upsertUsers(passwordHash);
   const seededProfiles = await upsertProfiles(seededUsersByEmail);
+  const seededSkillTags = await upsertSkillTags();
 
   console.log(`Seeded ${seededUsersByEmail.size} demo users.`);
   console.log(`Seeded ${seededProfiles.length} demo profiles.`);
+  console.log(`Seeded ${seededSkillTags.length} skill tags.`);
 };
 
 main().catch((error) => {
