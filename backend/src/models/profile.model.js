@@ -17,10 +17,12 @@ const profileInclude = {
   }
 };
 
-const buildSkillTagConnections = (skillTags = []) => {
-  const uniqueTags = [...new Set(skillTags.map((tag) => tag.trim()).filter(Boolean))];
+const normalizeSkillTagNames = (skillTags = []) => [
+  ...new Set(skillTags.map((tag) => tag.trim()).filter(Boolean))
+];
 
-  return uniqueTags.map((name) => ({
+const buildSkillTagConnections = (skillTags = []) => {
+  return normalizeSkillTagNames(skillTags).map((name) => ({
     skillTag: {
       connectOrCreate: {
         where: { name },
@@ -29,6 +31,10 @@ const buildSkillTagConnections = (skillTags = []) => {
     }
   }));
 };
+
+const buildSkillTagConnectOrCreate = (skillTags = []) => ({
+  create: buildSkillTagConnections(skillTags)
+});
 
 const normalizeProfile = (profile) => ({
   ...profile,
@@ -84,27 +90,17 @@ export const createProfile = async (userId, profileData) => {
 export const updateProfile = async (id, profileData) => {
   const { skillTags, ...data } = profileData;
 
-  const profile = await prisma.$transaction(async (tx) => {
-    if (Array.isArray(skillTags)) {
-      await tx.profileSkillTag.deleteMany({
-        where: { profileId: id }
-      });
-    }
-
-    return tx.profile.update({
-      where: { id },
-      data: {
-        ...data,
-        ...(Array.isArray(skillTags)
-          ? {
-              skillTags: {
-                create: buildSkillTagConnections(skillTags)
-              }
-            }
-          : {})
-      },
-      include: profileInclude
-    });
+  const profile = await prisma.profile.update({
+    where: { id },
+    data: {
+      ...data,
+      ...(Array.isArray(skillTags)
+        ? {
+            skillTags: buildSkillTagConnectOrCreate(skillTags)
+          }
+        : {})
+    },
+    include: profileInclude
   });
 
   return normalizeProfile(profile);
