@@ -31,6 +31,10 @@ model User {
   reviewsGiven    Review[] @relation("ReviewsGiven")
   reviewsReceived Review[] @relation("ReviewsReceived")
 
+  //⬇ requests relations (client => talent / sent & received) ⬇
+  clientRequests Request[] @relation("ClientRequests")
+  talentRequests Request[] @relation("TalentRequests")
+
   @@index([role])
   @@index([location])
 }
