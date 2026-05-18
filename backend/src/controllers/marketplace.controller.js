@@ -80,9 +80,18 @@ export const getMarketPlaceUsers = async (req ,res)=>{
                 })
             },
             include : {
-                skills: {
+                profile : {
                     include : {
-                        skill : true
+                        skillTags : {
+                            include : {
+                                skillTags : True
+                            }
+                        }
+                    }
+                },
+                skills : {
+                    include : {
+                        skill : True
                     }
                 }
             },
