@@ -53,7 +53,7 @@ Express + Prisma backend for SideQuest, written in JavaScript.
 - `GET /profiles/:id` fetches one profile.
 - `GET /profiles/user/:userId` fetches a profile by user.
 - `POST /profiles` creates a profile.
-- `PUT /profiles/:id` updates a profile.
+- `PUT /profiles/:id` updates a profile. When `skillTags` is included, new tags are added without removing existing tags.
 
 Required `POST /users` JSON fields:
 
@@ -88,3 +88,5 @@ Example `PUT /profiles/:id` JSON:
   "skillTags": ["React", "Node.js", "Prisma"]
 }
 ```
+
+Repeated skill tags, blank skill tags, and extra spaces are ignored during profile updates.
