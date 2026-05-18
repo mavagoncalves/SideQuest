@@ -216,65 +216,42 @@ const ProfilePage = () => {
                     </div>
 
                     <div className="mt-6 grid items-start gap-6 lg:grid-cols-[2fr_1fr]">
-                        <div className="space-y-6">
-                            <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
-                                <h2 className="text-2xl font-bold">Services</h2>
-                                <div className="mt-5 grid gap-4">
-                                    {userProfile.services.length > 0 ? (
-                                        userProfile.services.map((service, index) => (
-                                            <article className="rounded-lg border border-orange-100 bg-orange-50/40 p-5" key={index}>
-                                                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                                                    <div>
-                                                        <h3 className="text-lg font-bold">{service.title}</h3>
-                                                        <p className="mt-2 text-sm leading-6 text-slate-600">{service.description}</p>
-                                                    </div>
-                                                    <p className="shrink-0 rounded-full bg-white px-4 py-2 text-sm font-extrabold text-pink-600">{service.price}</p>
-                                                </div>
-                                            </article>
-                                        ))
-                                    ) : (
-                                        <p className="text-sm text-slate-500 italic">No services listed yet.</p>
-                                    )}
+                        <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                                <div>
+                                    <h2 className="text-2xl font-bold">Reviews</h2>
+                                    <p className="mt-2 text-sm text-slate-500">Feedback from students who sent completed Quest Requests.</p>
+                                </div>
+                                <div className="flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-700">
+                                    <Star size={17} className="fill-orange-500 text-orange-500" />
+                                    <span>{averageRating} from {sampleReviews.length} reviews</span>
                                 </div>
                             </div>
 
-                            <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
-                                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                                    <div>
-                                        <h2 className="text-2xl font-bold">Reviews</h2>
-                                        <p className="mt-2 text-sm text-slate-500">Feedback from students who sent completed Quest Requests.</p>
-                                    </div>
-                                    <div className="flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-bold text-orange-700">
-                                        <Star size={17} className="fill-orange-500 text-orange-500" />
-                                        <span>{averageRating} from {sampleReviews.length} reviews</span>
-                                    </div>
-                                </div>
-
-                                <div className="mt-5 grid gap-4">
-                                    {sampleReviews.map((review, index) => (
-                                        <article className="rounded-lg border border-orange-100 bg-orange-50/40 p-5" key={index}>
-                                            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                                <div>
-                                                    <h3 className="font-bold">{review.name}</h3>
-                                                    <p className="mt-1 text-sm text-slate-500">{review.role}</p>
-                                                </div>
-                                                <div className="flex items-center gap-2 text-sm font-semibold text-slate-500">
-                                                    <div className="flex">
-                                                        {[1, 2, 3, 4, 5].map((star) => (
-                                                            <Star
-                                                                key={star}
-                                                                size={16}
-                                                                className={star <= review.rating ? 'fill-orange-500 text-orange-500' : 'text-orange-200'}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                    <span>{review.date}</span>
-                                                </div>
+                            <div className="mt-5 grid gap-4">
+                                {sampleReviews.map((review, index) => (
+                                    <article className="rounded-lg border border-orange-100 bg-orange-50/40 p-5" key={index}>
+                                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                            <div>
+                                                <h3 className="font-bold">{review.name}</h3>
+                                                <p className="mt-1 text-sm text-slate-500">{review.role}</p>
                                             </div>
-                                            <p className="mt-4 leading-6 text-slate-600">{review.text}</p>
-                                        </article>
-                                    ))}
-                                </div>
+                                            <div className="flex items-center gap-2 text-sm font-semibold text-slate-500">
+                                                <div className="flex">
+                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                        <Star
+                                                            key={star}
+                                                            size={16}
+                                                            className={star <= review.rating ? 'fill-orange-500 text-orange-500' : 'text-orange-200'}
+                                                        />
+                                                    ))}
+                                                </div>
+                                                <span>{review.date}</span>
+                                            </div>
+                                        </div>
+                                        <p className="mt-4 leading-6 text-slate-600">{review.text}</p>
+                                    </article>
+                                ))}
                             </div>
                         </div>
 
