@@ -86,7 +86,7 @@ const ProfilePage = () => {
                 location: userProfile.location,
                 hourlyRateCents: Number(userProfile.startingPrice) * 100,
                 bio: userProfile.bio,
-                skillTags: userProfile.skills // <-- ADD THIS LINE
+                skillTags: userProfile.skills // Sends the list of skills to the backend
             }
 
             if (profileDbId) {
