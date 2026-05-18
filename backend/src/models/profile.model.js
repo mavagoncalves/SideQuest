@@ -30,6 +30,10 @@ const buildSkillTagConnections = (skillTags = []) => {
   }));
 };
 
+const buildSkillTagConnectOrCreate = (skillTags = []) => ({
+  create: buildSkillTagConnections(skillTags)
+});
+
 const normalizeProfile = (profile) => ({
   ...profile,
   skillTags: profile.skillTags.map(({ skillTag }) => skillTag)
