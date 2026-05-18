@@ -32,12 +32,14 @@ export const getMarketPlaceUsers = async (req ,res)=>{
                             }
                         },
                         {
-                            skills : {
-                                some : {
-                                    skill : {
-                                        name : {
-                                            contains : term,
-                                            mode : 'insensitive'
+                            profile : {
+                                skillTags : {
+                                    some : {
+                                        skillTag : {
+                                            name : {
+                                                contains : term,
+                                                mode : 'insensitive'
+                                            }
                                         }
                                     }
                                 }
@@ -48,10 +50,12 @@ export const getMarketPlaceUsers = async (req ,res)=>{
 
                 // SPECIFIC FILTERS ↓
                 ...(skill && {
-                    skills : {
-                        some : {
-                            skill: {
-                                name: skill
+                    profile : {
+                        skillTags : {
+                            some : {
+                                skillTag : {
+                                    name: skill
+                                }
                             }
                         }
                     }
