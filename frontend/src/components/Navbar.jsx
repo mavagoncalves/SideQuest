@@ -37,21 +37,16 @@ const Navbar = () => {
           <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             
             {/* Always visible links */}
-            <Link
+
+            {/* I commented out the link for admin, before it was just as a template idea, but idk what is gonna be done with it */}
+            
+            {/* <Link
               to="/admin"
               className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-orange-600 font-bold text-sm transition-colors"
             >
               <ShieldCheck size={18} />
               <span className="hidden md:inline">Admin</span>
-            </Link>
-            
-            <Link 
-              to="/service/create"
-              className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full hover:shadow-lg hover:shadow-orange-300/50 transition-all font-bold text-sm flex items-center gap-2"
-            >
-              <BriefcaseBusiness size={18} />
-              <span className="hidden sm:inline">Post Service</span>
-            </Link>
+            </Link> */}
 
             {/* Smart Authentication Divider */}
             <div className="h-6 w-px bg-orange-200 mx-2 hidden sm:block"></div>
