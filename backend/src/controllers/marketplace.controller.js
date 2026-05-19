@@ -32,12 +32,14 @@ export const getMarketPlaceUsers = async (req ,res)=>{
                             }
                         },
                         {
-                            skills : {
-                                some : {
-                                    skill : {
-                                        name : {
-                                            contains : term,
-                                            mode : 'insensitive'
+                            profile : {
+                                skillTags : {
+                                    some : {
+                                        skillTag : {
+                                            name : {
+                                                contains : term,
+                                                mode : 'insensitive'
+                                            }
                                         }
                                     }
                                 }
@@ -48,10 +50,12 @@ export const getMarketPlaceUsers = async (req ,res)=>{
 
                 // SPECIFIC FILTERS ↓
                 ...(skill && {
-                    skills : {
-                        some : {
-                            skill: {
-                                name: skill
+                    profile : {
+                        skillTags : {
+                            some : {
+                                skillTag : {
+                                    name: skill
+                                }
                             }
                         }
                     }
@@ -80,7 +84,16 @@ export const getMarketPlaceUsers = async (req ,res)=>{
                 })
             },
             include : {
-                skills: {
+                profile : {
+                    include : {
+                        skillTags : {
+                            include : {
+                                skillTag : true
+                            }
+                        }
+                    }
+                },
+                skills : {
                     include : {
                         skill : true
                     }
@@ -106,6 +119,20 @@ export const getMarketPlaceUserById = async(req , res)=>{
             where :{id},
 
             include: {
+
+                profile : {
+                    include : {
+                        skillTags : {
+                            include : {
+                                skillTag : true
+                            }
+                        }
+                    }
+                },
+
+                // GET REVIEWS ("reviewsReceived" in DB)
+                reviewsReceived : true,
+
                 skills:{
                     include:{
                         skill:true
