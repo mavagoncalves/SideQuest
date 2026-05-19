@@ -1,4 +1,4 @@
-import { prisma } from "../prisma/prisma.js";
+import { prisma } from "../../prisma/prisma.js";
 
 export const createReview = async (reviewerId, revieweeId, data) => {
   return prisma.review.create({
